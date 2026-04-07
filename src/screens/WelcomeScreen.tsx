@@ -20,7 +20,7 @@ const WelcomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const handleLogin = () => {
-    navigation.navigate('AppTabs');
+    navigation.navigate('Login');
   };
 
   return (

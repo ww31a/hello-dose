@@ -42,26 +42,26 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen 
-        name="Chat" 
-        component={ChatScreen} 
-        options={{ 
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
           tabBarLabel: 'Chat',
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen} 
-        options={{ 
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
           tabBarLabel: 'Home',
-        }} 
+        }}
       />
-      <Tab.Screen 
-        name="Profile" 
-        component={ProfileScreen} 
-        options={{ 
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
           tabBarLabel: 'Profile',
-        }} 
+        }}
       />
     </Tab.Navigator>
   );
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tabBackground,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    height: Platform.OS === 'ios' ? 88 : 70,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 12,
+    height: Platform.OS === 'ios' ? 150 : 120,
+    paddingBottom: Platform.OS === 'ios' ? 40 : 35,
     paddingTop: 12,
     borderTopWidth: 0,
     // Shadow for iOS
