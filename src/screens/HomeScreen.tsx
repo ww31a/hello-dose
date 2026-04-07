@@ -9,6 +9,8 @@ import {
   ImageBackground,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   ChevronRight,
   ArrowRight
@@ -26,7 +28,11 @@ import HeartIcon from '../assets/icons/heart.svg';
 import VideoPlayIcon from '../assets/icons/video-play.svg';
 import CalendarIcon from '../assets/icons/calender.svg';
 
+import { RootStackParamList } from '../navigation/RootNavigator';
+
 const HomeScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView
@@ -44,19 +50,20 @@ const HomeScreen = () => {
           <View style={styles.cardHeader}>
             <Text style={styles.cardLabel}>YOUR CURRENT PROGRAM</Text>
           </View>
-          <View style={styles.programRow}>
+          <TouchableOpacity 
+            style={styles.programRow}
+            onPress={() => navigation.navigate('MyProgram')}
+          >
             <Text style={styles.programTitle}>DROP Tirzepatide</Text>
-            <TouchableOpacity>
-              <ChevronRight color={Colors.dark} size={24} />
-            </TouchableOpacity>
-          </View>
+            <ChevronRight color={Colors.dark} size={24} />
+          </TouchableOpacity>
           <Text style={styles.cardSubtitle}>Last Injection: 3 days ago</Text>
 
           <View style={styles.buttonRow}>
             <Button
               label="Log Injection"
               variant="primary"
-              onPress={() => { }}
+              onPress={() => navigation.navigate('LogInjection')}
               style={styles.cardButton}
             />
             <Button

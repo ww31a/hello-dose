@@ -5,6 +5,8 @@ import TabNavigator from './TabNavigator';
 import LoginScreen from '../screens/LoginScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import LoginErrorScreen from '../screens/LoginErrorScreen';
+import LogInjectionScreen from '../screens/LogInjectionScreen';
+import MyProgramScreen from '../screens/MyProgramScreen';
 
 export type RootStackParamList = {
   Welcome: undefined;
@@ -12,6 +14,8 @@ export type RootStackParamList = {
   Verification: { email: string };
   LoginError: { email: string };
   AppTabs: undefined;
+  LogInjection: undefined;
+  MyProgram: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,6 +33,8 @@ const RootNavigator = () => {
       <Stack.Screen name="Verification" component={VerificationScreen} />
       <Stack.Screen name="LoginError" component={LoginErrorScreen} />
       <Stack.Screen name="AppTabs" component={TabNavigator} />
+      <Stack.Screen name="LogInjection" component={LogInjectionScreen} />
+      <Stack.Screen name="MyProgram" component={MyProgramScreen} />
     </Stack.Navigator>
   );
 };
