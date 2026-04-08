@@ -53,17 +53,17 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    justifyContent: 'space-between',
   },
   siteBox: {
-    width: '48%',
+    width: '48.5%',
     height: 80,
     borderWidth: 1,
     borderColor: '#F1F5F9',
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 12,
   },
   siteBoxSelected: {
     borderColor: Colors.primary,
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Typography.fontFamily.medium,
     color: Colors.dark,
+    marginTop: 8,
   },
   siteTextSelected: {
     color: Colors.primary,

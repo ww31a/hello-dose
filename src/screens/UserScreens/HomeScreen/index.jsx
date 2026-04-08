@@ -60,6 +60,7 @@ const HomeScreen = () => {
               variant="primary"
               onPress={() => navigation.navigate('LogInjection')}
               style={styles.cardButton}
+              textStyle={styles.cardButtonText}
             />
             <Button
               label="Reorder"
@@ -147,12 +148,14 @@ const ReminderItem = ({ icon: Icon, label, action }) => (
   <View style={styles.reminderItem}>
     <Icon width={40} height={40} style={styles.reminderIcon} />
     <View style={styles.reminderTextRow}>
-      <Text style={styles.reminderLabel}>{label}</Text>
-      {action && (
-        <TouchableOpacity>
-          <Text style={styles.reminderAction}>{action}</Text>
-        </TouchableOpacity>
-      )}
+      <View style={styles.reminderInline}>
+        <Text style={styles.reminderLabel}>{label}</Text>
+        {action && (
+          <TouchableOpacity>
+            <Text style={styles.reminderAction}>{action}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   </View>
 );

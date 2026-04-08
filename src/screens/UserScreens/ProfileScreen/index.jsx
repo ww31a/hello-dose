@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronRight } from 'lucide-react-native';
-import FirstAidIcon from '../../../assets/icons/firstAID-icon.svg';
+import FirstAidIcon from '../../../assets/icons/nurse-hat.svg';
 
 import styles from './styles';
 
@@ -58,7 +58,7 @@ const ProfileScreen = () => {
           onPress={() => navigation.navigate('Home', { screen: 'MyNP' })}
         >
           <View style={styles.npIconWrapper}>
-            <FirstAidIcon width={24} height={24} color="#0D9488" />
+            <FirstAidIcon width={50} height={50} color="#0D9488" />
           </View>
           <View style={styles.npContent}>
             <Text style={styles.npName}>Bracha Banayan</Text>

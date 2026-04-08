@@ -83,27 +83,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
+    overflow: 'hidden',
   },
-  decimalBox: {
+  decimalContent: {
     width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
+    height: '100%',
+    justifyContent: 'center',
   },
   valueText: {
     fontSize: 28,
+    lineHeight: 30,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
-    flex: 1,
     textAlign: 'center',
+    includeFontPadding: false,
   },
-  decimalValueText: {
-    marginRight: 24, // Offset to account for the left-aligned point to keep number centered
-  },
-  decimalPoint: {
-    fontSize: 24,
-    fontFamily: Typography.fontFamily.bold,
-    color: '#94A3B8',
-    width: 20,
+  decimalPointDot: {
+    position: 'absolute',
+    left: 0,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#94A3B8',
   },
   unitToggle: {
     flexDirection: 'row',

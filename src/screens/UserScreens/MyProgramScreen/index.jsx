@@ -82,7 +82,7 @@ const MyProgramScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.logWeightButton}
-            onPress={() => navigation.navigate('UpdateWeight')}
+            onPress={() => navigation.navigate('WeightTrend')}
           >
             <Text style={styles.logWeightText}>Log Weight</Text>
           </TouchableOpacity>

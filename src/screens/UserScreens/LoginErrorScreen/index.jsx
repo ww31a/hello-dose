@@ -41,8 +41,9 @@ const LoginErrorScreen = () => {
 
           <Text style={styles.subtitle}>
             We couldn't find an account associated with this <Text style={styles.emailText}>email.</Text>
-            Please check for typos or contact support if you need help.
           </Text>
+          <Text style={styles.subtitle}>Please check for typos or contact support if you need help.</Text>
+
         </View>
 
         <View style={styles.footer}>

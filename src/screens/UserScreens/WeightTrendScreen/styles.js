@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   badge: {
     backgroundColor: '#F0FDFA',
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingVertical: 2,
     borderRadius: 12,
   },
   badgeText: {
@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
   updateButton: {
     backgroundColor: '#F7F8FA',
     borderRadius: 30,
-    paddingHorizontal: 28,
-    paddingVertical: 18,
+    paddingHorizontal: 25,
+    paddingVertical: 15,
   },
   updateButtonText: {
     fontSize: 16,
