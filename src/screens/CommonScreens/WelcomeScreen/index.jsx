@@ -44,7 +44,7 @@ const WelcomeScreen = () => {
               />
               <Button
                 label="Login as an NP"
-                onPress={handleLogin}
+                onPress={() => navigation.navigate('NPLogin')}
                 variant="primary"
               />
             </View>
