@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/UserScreens/HomeScreen';
-import MyProgramScreen from '../screens/UserScreens/MyProgramScreen';
-import LogInjectionScreen from '../screens/UserScreens/LogInjectionScreen';
-import WeightTrendScreen from '../screens/UserScreens/WeightTrendScreen';
+import HomeScreen from '../../screens/UserScreens/HomeScreen';
+import MyProgramScreen from '../../screens/UserScreens/MyProgramScreen';
+import LogInjectionScreen from '../../screens/UserScreens/LogInjectionScreen';
+import WeightTrendScreen from '../../screens/UserScreens/WeightTrendScreen';
 
 const Stack = createNativeStackNavigator();
 

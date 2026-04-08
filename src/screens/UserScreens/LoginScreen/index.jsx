@@ -2,22 +2,18 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ChevronLeft, Mail } from 'lucide-react-native';
-import { RootStackParamList } from '../navigation/RootNavigator';
-import { Colors, Typography } from '../theme';
-import Input from '../components/Input';
-import Button from '../components/Button';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+import { Colors } from '../../../theme';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import styles from './styles';
 
 const LoginScreen = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
 
   const handleLogin = () => {
@@ -76,51 +72,5 @@ const LoginScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F7F8FA', // Lightest gray from mockup
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  backButton: {
-    marginTop: 10,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-  },
-  content: {
-    marginTop: 40,
-  },
-  welcomeText: {
-    fontSize: 16,
-    fontFamily: Typography.fontFamily.bold,
-    color: Colors.dark,
-    marginBottom: 8,
-  },
-  patientBadge: {
-    color: '#6B7280',
-    fontFamily: Typography.fontFamily.regular,
-  },
-  heading: {
-    fontSize: 32,
-    fontFamily: Typography.fontFamily.bold,
-    color: Colors.dark,
-    lineHeight: 40,
-    marginBottom: 40,
-  },
-  inputContainer: {
-    marginTop: 10,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 24,
-    right: 24,
-  },
-});
 
 export default LoginScreen;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import WelcomeScreen from '../screens/CommonScreens/WelcomeScreen';
-import TabNavigator from './TabNavigator';
-import LoginScreen from '../screens/UserScreens/LoginScreen';
-import VerificationScreen from '../screens/UserScreens/VerificationScreen';
-import LoginErrorScreen from '../screens/UserScreens/LoginErrorScreen';
+import WelcomeScreen from '../../screens/CommonScreens/WelcomeScreen';
+import TabNavigator from '../TabNavigator';
+import LoginScreen from '../../screens/UserScreens/LoginScreen';
+import VerificationScreen from '../../screens/UserScreens/VerificationScreen';
+import LoginErrorScreen from '../../screens/UserScreens/LoginErrorScreen';
 
 const Stack = createNativeStackNavigator();
 

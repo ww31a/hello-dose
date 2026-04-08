@@ -1,18 +1,18 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeStackNavigator from './HomeStackNavigator';
-import ChatScreen from '../screens/UserScreens/ChatScreen';
-import ProfileScreen from '../screens/UserScreens/ProfileScreen';
-import { Colors } from '../theme';
-import styles from './TabNavigator/styles';
+import HomeStackNavigator from '../HomeStackNavigator';
+import ChatScreen from '../../screens/UserScreens/ChatScreen';
+import ProfileScreen from '../../screens/UserScreens/ProfileScreen';
+import { Colors } from '../../theme';
+import styles from './styles';
 
 // Bottom Navigation SVGs
-import ChatDefault from '../assets/icons/bottom-Nav/chat-default.svg';
-import ChatSelected from '../assets/icons/bottom-Nav/chat-selected.svg';
-import HomeDefault from '../assets/icons/bottom-Nav/home-default.svg';
-import HomeSelected from '../assets/icons/bottom-Nav/home-selected.svg';
-import ProfileDefault from '../assets/icons/bottom-Nav/profile-default.svg';
-import ProfileSelected from '../assets/icons/bottom-Nav/profile-selected.svg';
+import ChatDefault from '../../assets/icons/bottom-Nav/chat-default.svg';
+import ChatSelected from '../../assets/icons/bottom-Nav/chat-selected.svg';
+import HomeDefault from '../../assets/icons/bottom-Nav/home-default.svg';
+import HomeSelected from '../../assets/icons/bottom-Nav/home-selected.svg';
+import ProfileDefault from '../../assets/icons/bottom-Nav/profile-default.svg';
+import ProfileSelected from '../../assets/icons/bottom-Nav/profile-selected.svg';
 
 const Tab = createBottomTabNavigator();
 

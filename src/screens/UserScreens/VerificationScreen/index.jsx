@@ -2,25 +2,20 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
-import { RootStackParamList } from '../navigation/RootNavigator';
-import { Colors, Typography } from '../theme';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import Lock from '../assets/icons/Login.svg';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Verification'>;
-type VerificationRouteProp = RouteProp<RootStackParamList, 'Verification'>;
+import { Colors } from '../../../theme';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import Lock from '../../../assets/icons/Login.svg';
+import styles from './styles';
 
 const VerificationScreen = () => {
-  const navigation = useNavigation<NavigationProp>();
-  const route = useRoute<VerificationRouteProp>();
+  const navigation = useNavigation();
+  const route = useRoute();
   const { email } = route.params;
   const [code, setCode] = useState('');
 
@@ -69,7 +64,7 @@ const VerificationScreen = () => {
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={[styles.linkText, { color: Colors.dark, fontFamily: Typography.fontFamily.bold }]}>Change Email</Text>
+              <Text style={styles.changeEmailLink}>Change Email</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -93,79 +88,5 @@ const VerificationScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F7F8FA',
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  backButton: {
-    marginTop: 10,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-  },
-  content: {
-    marginTop: 40,
-  },
-  welcomeText: {
-    fontSize: 16,
-    fontFamily: Typography.fontFamily.bold,
-    color: Colors.dark,
-    marginBottom: 8,
-  },
-  patientBadge: {
-    color: '#6B7280',
-    fontFamily: Typography.fontFamily.regular,
-  },
-  heading: {
-    fontSize: 32,
-    fontFamily: Typography.fontFamily.bold,
-    color: Colors.dark,
-    lineHeight: 40,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: Typography.fontFamily.regular,
-    color: '#6B7280',
-    lineHeight: 24,
-    marginBottom: 32,
-  },
-  inputContainer: {
-    color: '#9CA3AF',
-    marginTop: 10,
-  },
-  linksRow: {
-    flexDirection: 'row',
-    marginTop: 16,
-  },
-  mutedText: {
-    color: '#6B7280',
-    fontFamily: Typography.fontFamily.medium,
-    fontSize: 14,
-  },
-  linkText: {
-    color: '#6B7280',
-    fontFamily: Typography.fontFamily.medium,
-    fontSize: 14,
-    textDecorationLine: 'none',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 24,
-    right: 24,
-  },
-  resendRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 16,
-  },
-});
 
 export default VerificationScreen;
