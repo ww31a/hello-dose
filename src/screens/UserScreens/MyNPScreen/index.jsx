@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -16,11 +16,7 @@ import styles from './styles';
 
 const MyNPScreen = () => {
   const navigation = useNavigation();
-
-  // For demonstration, let's assume we can toggle between states
-  // State 1: No check-in scheduled
-  // State 2: Check-in scheduled (e.g., Feb 20, 2026)
-  const isScheduled = false;
+  const [isScheduled, setIsScheduled] = useState(false);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -52,8 +48,27 @@ const MyNPScreen = () => {
 
         {/* Info Cards */}
         <View style={styles.cardsContainer}>
+          <View style={styles.stateToggleRow}>
+            <TouchableOpacity
+              style={[styles.stateToggleBtn, !isScheduled && styles.stateToggleBtnActive]}
+              onPress={() => setIsScheduled(false)}
+            >
+              <Text style={[styles.stateToggleText, !isScheduled && styles.stateToggleTextActive]}>
+                No check-in
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.stateToggleBtn, isScheduled && styles.stateToggleBtnActive]}
+              onPress={() => setIsScheduled(true)}
+            >
+              <Text style={[styles.stateToggleText, isScheduled && styles.stateToggleTextActive]}>
+                Scheduled
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Next Check-in Card */}
-          <View style={styles.infoCard}>
+          <View style={[styles.infoCard, styles.nextCheckinCard]}>
             <View style={styles.cardContent}>
               <Text style={styles.cardLabel}>NEXT CHECKIN</Text>
               {isScheduled ? (

@@ -65,7 +65,12 @@ const Button = ({
           size="small"
         />
       ) : (
-        <Text style={[styles.baseLabel, getLabelStyle(), textStyle]}>
+        <Text
+          style={[styles.baseLabel, getLabelStyle(), textStyle]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.85}
+        >
           {label}
         </Text>
       )}

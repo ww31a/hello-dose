@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Users, Clock3 } from 'lucide-react-native';
+import Patient from '../../../assets/icons/bottom-Nav/patients-default.svg'
+import Clock from '../../../assets/icons/time.svg'
 
 import styles from './styles';
 
@@ -26,7 +27,7 @@ const NPProfileScreen = () => {
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <Image
-              source={require('../../../assets/images/profile-pic.png')}
+              source={require('../../../assets/images/Np-Profile-Pic.png')}
               style={styles.avatar}
             />
           </View>
@@ -41,7 +42,7 @@ const NPProfileScreen = () => {
         <View style={styles.infoCard}>
           <View style={styles.activeLeft}>
             <View style={styles.activeIconWrapper}>
-              <Users size={18} color="#60A5FA" />
+              <Patient size={18} color="#3B82F6" />
             </View>
             <Text style={styles.activeLabel}>ACTIVE PATIENTS</Text>
           </View>
@@ -58,7 +59,7 @@ const NPProfileScreen = () => {
 
           <View style={styles.availabilityRow}>
             <View style={styles.clockIconWrapper}>
-              <Clock3 size={20} color="#0D9488" />
+              <Clock size={100} color="#0D9488" />
             </View>
             <View style={styles.availabilityTextWrap}>
               <Text style={styles.availabilityTitle}>Currently On Shift</Text>

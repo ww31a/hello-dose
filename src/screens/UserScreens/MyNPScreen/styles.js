@@ -81,6 +81,32 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 40,
   },
+  stateToggleRow: {
+    flexDirection: 'row',
+    backgroundColor: '#ECEFF3',
+    borderRadius: 16,
+    padding: 4,
+    marginBottom: 4,
+  },
+  stateToggleBtn: {
+    flex: 1,
+    height: 34,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stateToggleBtnActive: {
+    backgroundColor: '#FFFFFF',
+  },
+  stateToggleText: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#64748B',
+  },
+  stateToggleTextActive: {
+    color: Colors.dark,
+    fontFamily: Typography.fontFamily.bold,
+  },
   infoCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
@@ -93,6 +119,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
+  },
+  nextCheckinCard: {
+    alignItems: 'flex-start',
   },
   cardContent: {
     flex: 1,
@@ -119,6 +148,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 3,
     borderRadius: 20,
+    marginTop: 2,
   },
   scheduleButtonText: {
     color: '#FFFFFF',

@@ -130,7 +130,7 @@ const PatientsScreen = ({ navigation }) => {
                 {patient.eligible ? (
                   <TickIcon width={20} height={20} color="#0D9488" />
                 ) : (
-                  <TimeIcon width={20} height={20} color="#64748B" />
+                  <TimeIcon width={30} height={30} color="#64748B" />
                 )}
                 <Text style={patient.eligible ? styles.eligibleText : styles.pendingText}>
                   {patient.eligibleText}

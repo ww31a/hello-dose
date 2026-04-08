@@ -66,12 +66,16 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
+    marginHorizontal: -6,
   },
   cardButton: {
     flex: 1,
     height: 48,
     marginVertical: 0,
+    marginHorizontal: 6,
+  },
+  cardButtonText: {
+    fontSize: 14,
   },
   reminderWait: {
     fontSize: 14,
@@ -101,9 +105,12 @@ const styles = StyleSheet.create({
   },
   reminderTextRow: {
     flex: 1,
+    justifyContent: 'center',
+  },
+  reminderInline: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   reminderLabel: {
     fontSize: 14,
@@ -114,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: Typography.fontFamily.regular,
     color: '#94A3B8',
-    textDecorationLine: 'underline',
+    marginLeft: 8,
   },
   sectionHeader: {
     marginVertical: 16,
@@ -158,14 +165,14 @@ const styles = StyleSheet.create({
   comingUpHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     marginBottom: 16,
   },
   comingUpText: {
     fontSize: 14,
     fontFamily: Typography.fontFamily.medium,
     color: '#6B7280',
-    marginTop: 4,
+    marginTop: 6,
     flex: 1,
     marginRight: 10,
   },

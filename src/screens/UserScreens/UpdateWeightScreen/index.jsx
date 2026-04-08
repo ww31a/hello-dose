@@ -81,9 +81,9 @@ const UpdateWeightScreen = () => {
               </TouchableOpacity>
               
               <View style={styles.displayBox}>
-                <View style={styles.decimalBox}>
-                  <Text style={styles.decimalPoint}>.</Text>
-                  <Text style={[styles.valueText, styles.decimalValueText]}>{decimalPart}</Text>
+                <View style={styles.decimalContent}>
+                  <View style={styles.decimalPointDot} />
+                  <Text style={styles.valueText}>{decimalPart}</Text>
                 </View>
               </View>
               
