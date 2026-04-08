@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
   tealOutlineLabel: {
     color: Colors.dark,
   },
-  // Disabled: Gray background, muted text
+  // Disabled: Light gray background, muted text
   disabledContainer: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FCFCFE',
   },
   disabledLabel: {
-    color: '#CCCCCC',
+    color: '#C5C5CB',
   },
 });
 

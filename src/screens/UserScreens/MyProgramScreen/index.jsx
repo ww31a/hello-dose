@@ -69,25 +69,31 @@ const MyProgramScreen = () => {
         </View>
 
         {/* Weight Logging Card */}
-        <TouchableOpacity
-          style={styles.weightCard}
-          onPress={() => navigation.navigate('WeightTrend')}
-        >
-          <View style={styles.weightContent}>
+        <View style={styles.weightCard}>
+          <TouchableOpacity 
+            style={styles.weightContent}
+            onPress={() => navigation.navigate('WeightTrend')}
+          >
             <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
             <View style={styles.weightRow}>
               <Text style={styles.weightValue}>140.0</Text>
               <Text style={styles.weightUnit}>lbs</Text>
             </View>
-          </View>
-          <View style={styles.logWeightButton}>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.logWeightButton}
+            onPress={() => navigation.navigate('UpdateWeight')}
+          >
             <Text style={styles.logWeightText}>Log Weight</Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
 
         {/* My NP Details */}
         <Text style={styles.sectionHeader}>My NP Details</Text>
-        <TouchableOpacity style={styles.npCard}>
+        <TouchableOpacity 
+          style={styles.npCard}
+          onPress={() => navigation.navigate('MyNP')}
+        >
           <View style={styles.npIconWrapper}>
             <NurseIcon width={50} height={50} />
           </View>

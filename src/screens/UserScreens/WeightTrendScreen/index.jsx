@@ -61,7 +61,10 @@ const WeightTrendScreen = () => {
               </View>
             </View>
           </View>
-          <TouchableOpacity style={styles.updateButton}>
+          <TouchableOpacity 
+            style={styles.updateButton}
+            onPress={() => navigation.navigate('UpdateWeight')}
+          >
             <Text style={styles.updateButtonText}>Update</Text>
           </TouchableOpacity>
         </View>

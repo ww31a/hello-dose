@@ -5,6 +5,8 @@ import TabNavigator from '../TabNavigator';
 import LoginScreen from '../../screens/UserScreens/LoginScreen';
 import VerificationScreen from '../../screens/UserScreens/VerificationScreen';
 import LoginErrorScreen from '../../screens/UserScreens/LoginErrorScreen';
+import ScheduleAppointmentScreen from '../../screens/UserScreens/ScheduleAppointmentScreen';
+import SelectTimeSlotScreen from '../../screens/UserScreens/SelectTimeSlot';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +23,8 @@ const RootNavigator = () => {
       <Stack.Screen name="Verification" component={VerificationScreen} />
       <Stack.Screen name="LoginError" component={LoginErrorScreen} />
       <Stack.Screen name="AppTabs" component={TabNavigator} />
+      <Stack.Screen name="ScheduleAppointment" component={ScheduleAppointmentScreen} />
+      <Stack.Screen name="SelectTimeSlot" component={SelectTimeSlotScreen} />
     </Stack.Navigator>
   );
 };
