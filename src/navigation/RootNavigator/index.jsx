@@ -1,20 +1,12 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import WelcomeScreen from '../screens/WelcomeScreen';
+import WelcomeScreen from '../screens/CommonScreens/WelcomeScreen';
 import TabNavigator from './TabNavigator';
-import LoginScreen from '../screens/LoginScreen';
-import VerificationScreen from '../screens/VerificationScreen';
-import LoginErrorScreen from '../screens/LoginErrorScreen';
+import LoginScreen from '../screens/UserScreens/LoginScreen';
+import VerificationScreen from '../screens/UserScreens/VerificationScreen';
+import LoginErrorScreen from '../screens/UserScreens/LoginErrorScreen';
 
-export type RootStackParamList = {
-  Welcome: undefined;
-  Login: undefined;
-  Verification: { email: string };
-  LoginError: { email: string };
-  AppTabs: undefined;
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   return (

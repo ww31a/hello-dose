@@ -61,6 +61,8 @@ Mobile App → Backend → Vagaro (patient + program data)
 | Primary | `#0D9488` | Teal — CTA buttons, active states, selections |
 | Text / Dark | `#1E1E26` | Primary text, dark buttons |
 | Surface Light | `#F0FDFA` | Cards, selected state backgrounds |
+| Text / Secondary | `#6B7280` | Secondary labels, supporting text, subtitles |
+| Text / Muted | `#9CA3AF` | Placeholder text, disabled labels, hints |
 
 ### Typography
 - **Font Family:** Plus Jakarta Sans  

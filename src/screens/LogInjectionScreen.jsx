@@ -66,9 +66,7 @@ const LogInjectionScreen = () => {
                 <View style={[
                   styles.radio,
                   selectedSite === site && styles.radioSelected
-                ]}>
-                  {selectedSite === site && <View style={styles.radioInner} />}
-                </View>
+                ]} />
                 <Text style={[
                   styles.siteText,
                   selectedSite === site && styles.siteTextSelected
@@ -85,7 +83,7 @@ const LogInjectionScreen = () => {
               <Text style={styles.fieldLabel}>DATE</Text>
               <View style={styles.inputWrapper}>
                 <Text style={styles.inputText}>02/12/2025</Text>
-                <CalendarIcon width={50} height={50} />
+                <CalendarIcon width={20} height={20} />
               </View>
               <View style={styles.toggleRow}>
                 <TouchableOpacity
@@ -107,7 +105,7 @@ const LogInjectionScreen = () => {
               <Text style={styles.fieldLabel}>TIME</Text>
               <View style={styles.inputWrapper}>
                 <Text style={styles.inputText}>09:00 AM</Text>
-                <TimeIcon width={50} height={50} />
+                <TimeIcon width={40} height={40} />
               </View>
               <View style={styles.toggleRow}>
                 <TouchableOpacity
@@ -243,11 +241,6 @@ const styles = StyleSheet.create({
   },
   radioSelected: {
     borderColor: Colors.primary,
-  },
-  radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
     backgroundColor: Colors.primary,
   },
   siteText: {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Platform } from 'react-native';
 import HomeStackNavigator from './HomeStackNavigator';
-import ChatScreen from '../screens/ChatScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import { Colors, Typography } from '../theme';
+import ChatScreen from '../screens/UserScreens/ChatScreen';
+import ProfileScreen from '../screens/UserScreens/ProfileScreen';
+import { Colors } from '../theme';
+import styles from './TabNavigator/styles';
 
 // Bottom Navigation SVGs
 import ChatDefault from '../assets/icons/bottom-Nav/chat-default.svg';
@@ -64,29 +64,5 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: Colors.tabBackground,
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    height: Platform.OS === 'ios' ? 150 : 120,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 35,
-    paddingTop: 12,
-    borderTopWidth: 0,
-    // Shadow for iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    // Elevation for Android
-    elevation: 20,
-  },
-  tabBarLabel: {
-    fontFamily: Typography.fontFamily.medium,
-    fontSize: 12,
-    marginTop: 4,
-  },
-});
 
 export default TabNavigator;

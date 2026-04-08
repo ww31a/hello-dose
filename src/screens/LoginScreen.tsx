@@ -36,7 +36,7 @@ const LoginScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* Header with Back Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -47,7 +47,7 @@ const LoginScreen = () => {
           <Text style={styles.welcomeText}>
             Welcome back! <Text style={styles.patientBadge}>Patient Login</Text>
           </Text>
-          
+
           <Text style={styles.heading}>
             Let's get you{'\n'}logged in
           </Text>
@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 16,
-    fontFamily: Typography.fontFamily.medium,
-    color: '#64748B',
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
     marginBottom: 8,
   },
   patientBadge: {
-    color: '#94A3B8',
+    color: '#6B7280',
     fontFamily: Typography.fontFamily.regular,
   },
   heading: {

@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   // Secondary: Light teal surface background, dark text
   secondaryContainer: {
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
   },
   secondaryLabel: {
     color: Colors.dark,

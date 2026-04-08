@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   footerLink: {
     color: Colors.white,
-    fontFamily: Typography.fontFamily.bold,
+    fontFamily: Typography.fontFamily.medium,
     fontSize: 16,
     textDecorationLine: 'underline',
   },

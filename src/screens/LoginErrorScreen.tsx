@@ -44,7 +44,7 @@ const LoginErrorScreen = () => {
           </Text>
 
           <Text style={styles.subtitle}>
-            We couldn't find an account associated with this email.
+            We couldn't find an account associated with this <Text style={styles.emailText}>email.</Text>
             Please check for typos or contact support if you need help.
           </Text>
         </View>
@@ -80,6 +80,10 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
   },
+  emailText: {
+    color: '#64748B',
+    fontFamily: Typography.fontFamily.bold,
+  },
   content: {
     marginTop: 100,
     alignItems: 'center',
@@ -107,7 +111,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     fontFamily: Typography.fontFamily.regular,
-    color: '#64748B',
+    color: '#6B7280',
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: 10,
@@ -126,8 +130,8 @@ const styles = StyleSheet.create({
   supportText: {
     fontSize: 14,
     fontFamily: Typography.fontFamily.medium,
-    color: '#64748B',
-    textDecorationLine: 'underline',
+    color: '#6B7280',
+    textDecorationLine: 'none',
   },
 });
 

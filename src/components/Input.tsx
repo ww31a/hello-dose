@@ -12,7 +12,7 @@ import { LucideIcon } from 'lucide-react-native';
 
 interface InputProps extends TextInputProps {
   label?: string;
-  icon?: LucideIcon;
+  icon?: any;
   containerStyle?: ViewStyle;
 }
 
@@ -33,7 +33,7 @@ const Input: React.FC<InputProps> = ({
         />
         {Icon && (
           <View style={styles.iconContainer}>
-            <Icon size={20} color="#94A3B8" />
+            <Icon size={20} width={20} height={20} color="#94A3B8" />
           </View>
         )}
       </View>

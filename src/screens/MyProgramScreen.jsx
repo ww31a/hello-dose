@@ -68,7 +68,10 @@ const MyProgramScreen = () => {
         </View>
 
         {/* Weight Logging Card */}
-        <View style={styles.weightCard}>
+        <TouchableOpacity
+          style={styles.weightCard}
+          onPress={() => navigation.navigate('WeightTrend')}
+        >
           <View style={styles.weightContent}>
             <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
             <View style={styles.weightRow}>
@@ -76,10 +79,10 @@ const MyProgramScreen = () => {
               <Text style={styles.weightUnit}>lbs</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.logWeightButton}>
+          <View style={styles.logWeightButton}>
             <Text style={styles.logWeightText}>Log Weight</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
 
         {/* My NP Details */}
         <Text style={styles.sectionHeader}>My NP Details</Text>
@@ -94,15 +97,16 @@ const MyProgramScreen = () => {
           <ChevronRight color="#CBD5E1" size={20} />
         </TouchableOpacity>
 
+        {/* Action Button */}
+        <View style={styles.actionButtonContainer}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('LogInjection')}
+          >
+            <Text style={styles.actionButtonText}>Log Injection</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-
-      {/* Floating Action Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('LogInjection')}
-      >
-        <Text style={styles.fabText}>Log Injection</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -359,23 +363,19 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.medium,
     color: '#94A3B8',
   },
-  fab: {
-    position: 'absolute',
-    bottom: 40,
-    right: 24,
+  actionButtonContainer: {
+    alignItems: 'flex-end',
+    marginTop: 24,
+  },
+  actionButton: {
     backgroundColor: Colors.dark,
     paddingHorizontal: 24,
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
-    elevation: 10,
   },
-  fabText: {
+  actionButtonText: {
     fontSize: 16,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.white,

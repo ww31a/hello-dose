@@ -8,11 +8,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ChevronLeft, Lock } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { RootStackParamList } from '../navigation/RootNavigator';
 import { Colors, Typography } from '../theme';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import Lock from '../assets/icons/Login.svg';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Verification'>;
 type VerificationRouteProp = RouteProp<RootStackParamList, 'Verification'>;
@@ -34,7 +35,7 @@ const VerificationScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* Header with Back Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -45,11 +46,11 @@ const VerificationScreen = () => {
           <Text style={styles.welcomeText}>
             Welcome back! <Text style={styles.patientBadge}>Patient Login</Text>
           </Text>
-          
+
           <Text style={styles.heading}>
             Enter Verification Code
           </Text>
-          
+
           <Text style={styles.subtitle}>
             A 6-digit verification code has been sent to your email
           </Text>
@@ -68,7 +69,7 @@ const VerificationScreen = () => {
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.linkText}>Change Email</Text>
+              <Text style={[styles.linkText, { color: Colors.dark, fontFamily: Typography.fontFamily.bold }]}>Change Email</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -80,7 +81,7 @@ const VerificationScreen = () => {
             disabled={code.length < 6}
             variant="primary"
           />
-          
+
           <View style={styles.resendRow}>
             <Text style={styles.mutedText}>Didn't receive the code? </Text>
             <TouchableOpacity>
@@ -112,13 +113,13 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   welcomeText: {
-    fontSize: 14,
-    fontFamily: Typography.fontFamily.medium,
-    color: '#64748B',
+    fontSize: 16,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
     marginBottom: 8,
   },
   patientBadge: {
-    color: '#94A3B8',
+    color: '#6B7280',
     fontFamily: Typography.fontFamily.regular,
   },
   heading: {
@@ -131,11 +132,12 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     fontFamily: Typography.fontFamily.regular,
-    color: '#64748B',
+    color: '#6B7280',
     lineHeight: 24,
     marginBottom: 32,
   },
   inputContainer: {
+    color: '#9CA3AF',
     marginTop: 10,
   },
   linksRow: {
@@ -143,15 +145,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   mutedText: {
-    color: '#64748B',
-    fontFamily: Typography.fontFamily.regular,
+    color: '#6B7280',
+    fontFamily: Typography.fontFamily.medium,
     fontSize: 14,
   },
   linkText: {
-    color: Colors.dark,
-    fontFamily: Typography.fontFamily.bold,
+    color: '#6B7280',
+    fontFamily: Typography.fontFamily.medium,
     fontSize: 14,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'none',
   },
   footer: {
     position: 'absolute',

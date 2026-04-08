@@ -28,10 +28,10 @@ import HeartIcon from '../assets/icons/heart.svg';
 import VideoPlayIcon from '../assets/icons/video-play.svg';
 import CalendarIcon from '../assets/icons/calender.svg';
 
-import { RootStackParamList } from '../navigation/RootNavigator';
+import { HomeStackParamList } from '../navigation/HomeStackNavigator';
 
 const HomeScreen = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
