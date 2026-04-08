@@ -18,7 +18,7 @@ const Input = ({
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholderTextColor="#A0A0A0"
+          placeholderTextColor="#9CA3AF"
           {...props}
         />
         {Icon && (
