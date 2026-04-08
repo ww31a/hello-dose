@@ -6,7 +6,7 @@ import styles from './styles';
 // Screens
 import NPChatScreen from '../../screens/NPScreens/NPChatScreen';
 import NPHomeScreen from '../../screens/NPScreens/NPHomeScreen';
-import PatientsScreen from '../../screens/NPScreens/PatientsScreen';
+import NPPatientsStackNavigator from '../NPPatientsStackNavigator';
 import NPProfileScreen from '../../screens/NPScreens/NPProfileScreen';
 
 // SVGs
@@ -60,7 +60,7 @@ const NPTabNavigator = () => {
       />
       <Tab.Screen
         name="Patients"
-        component={PatientsScreen}
+        component={NPPatientsStackNavigator}
         options={{ tabBarLabel: 'Patients' }}
       />
       <Tab.Screen

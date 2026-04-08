@@ -9,6 +9,7 @@ import LoginErrorScreen from '../../screens/UserScreens/LoginErrorScreen';
 import ScheduleAppointmentScreen from '../../screens/UserScreens/ScheduleAppointmentScreen';
 import SelectTimeSlotScreen from '../../screens/UserScreens/SelectTimeSlot';
 import NPLoginScreen from '../../screens/NPScreens/NPLoginScreen';
+import ManageScheduleScreen from '../../screens/NPScreens/ManageScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const RootNavigator = () => {
       <Stack.Screen name="ScheduleAppointment" component={ScheduleAppointmentScreen} />
       <Stack.Screen name="SelectTimeSlot" component={SelectTimeSlotScreen} />
       <Stack.Screen name="NPLogin" component={NPLoginScreen} />
+      <Stack.Screen name="ManageSchedule" component={ManageScheduleScreen} />
     </Stack.Navigator>
   );
 };

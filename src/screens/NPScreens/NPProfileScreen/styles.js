@@ -1,0 +1,193 @@
+import { StyleSheet } from 'react-native';
+import { Colors, Typography } from '../../../theme';
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F7F8FA',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+    textAlign: 'center',
+    marginVertical: 16,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 24,
+  },
+  profileSection: {
+    alignItems: 'center',
+    marginBottom: 28,
+  },
+  avatarContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+    padding: 3,
+    marginBottom: 16,
+    backgroundColor: '#FFFFFF',
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 60,
+  },
+  name: {
+    fontSize: 24,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+    marginBottom: 6,
+  },
+  roleLabel: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.primary,
+    letterSpacing: 1,
+    marginBottom: 12,
+  },
+  badge: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  badgeText: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#9CA3AF',
+  },
+  infoCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  activeLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  activeIconWrapper: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#EFF6FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  activeLabel: {
+    fontSize: 13,
+    fontFamily: Typography.fontFamily.bold,
+    color: '#94A3B8',
+    letterSpacing: 0.4,
+  },
+  activeCount: {
+    position: 'absolute',
+    right: 22,
+    top: 22,
+    fontSize: 20,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+  },
+  availabilityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  cardLabel: {
+    fontSize: 10,
+    fontFamily: Typography.fontFamily.bold,
+    color: '#9CA3AF',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  manageLink: {
+    fontSize: 16,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.primary,
+  },
+  availabilityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clockIconWrapper: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E6FAF8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  availabilityTextWrap: {
+    flex: 1,
+  },
+  availabilityTitle: {
+    fontSize: 16,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+    marginBottom: 2,
+  },
+  availabilitySub: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#5B7FA6',
+  },
+  onlineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#22C55E',
+    marginLeft: 8,
+  },
+  detailsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 18,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 18,
+  },
+  detailLabel: {
+    fontSize: 14,
+    fontFamily: Typography.fontFamily.bold,
+    color: '#4B5563',
+  },
+  detailValue: {
+    fontSize: 14,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#9CA3AF',
+  },
+  footerBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F0FDFA',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  footerText: {
+    fontSize: 13,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#4B5563',
+  },
+});
+
+export default styles;
