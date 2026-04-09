@@ -6,10 +6,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F7F8FA',
   },
+  keyboardContainer: {
+    flex: 1,
+  },
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 32,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   // Header
   headerContainer: {

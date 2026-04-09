@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -9,33 +9,47 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { ChevronLeft } from 'lucide-react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { ChevronLeft, Eye, EyeOff } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 
 // Svg Icons
 import EmailIcon from '../../../assets/icons/email.svg';
-import NoViewIcon from '../../../assets/icons/no-view.svg';
 import WarningIcon from '../../../assets/icons/warning.svg';
 
 import styles from './styles';
 
 const NPLoginScreen = () => {
   const navigation = useNavigation();
+  const passwordInputRef = useRef(null);
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Toggle this true/false to switch between default and error states
-  const [isError, setIsError] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    // For demonstration, if password is exactly "error", trigger the error state
-    // Otherwise, simulate a successful login and navigate to the NP flow (AppTabs or a dedicated NP tab)
-    if (password === 'error') {
-      setIsError(true);
+    if (!email) return;
+
+    // Demo password error preview state
+    if (password.trim().toLowerCase() === 'error') {
+      setIsPasswordError(true);
+      return;
+    }
+
+    // Demo auth: only test@example.com is treated as valid NP email
+    if (email.trim().toLowerCase() !== 'test@example.com') {
+      setIsEmailError(true);
     } else {
-      setIsError(false);
-      navigation.navigate('NPTabs');
+      setIsEmailError(false);
+      setIsPasswordError(false);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'NPTabs' }],
+        })
+      );
     }
   };
 
@@ -69,7 +83,7 @@ const NPLoginScreen = () => {
             {/* Email Input */}
             <View style={styles.inputSection}>
               <Text style={styles.inputLabel}>Email</Text>
-              <View style={styles.inputWrapper}>
+              <View style={[styles.inputWrapper, isEmailError && styles.inputWrapperError]}>
                 <TextInput
                   style={styles.input}
                   placeholder="hello@example.com"
@@ -77,47 +91,75 @@ const NPLoginScreen = () => {
                   value={email}
                   onChangeText={(text) => {
                     setEmail(text);
-                    if (isError) setIsError(false);
+                    if (isEmailError) setIsEmailError(false);
                   }}
                   autoCapitalize="none"
                   keyboardType="email-address"
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
                 />
-                <View style={styles.iconRight}>
-                  <EmailIcon width={20} height={20} color="#9CA3AF" />
-                </View>
+                {isEmailError ? (
+                  <View style={styles.iconRight}>
+                    <WarningIcon width={20} height={20} color="#EF4444" />
+                  </View>
+                ) : (
+                  <View style={styles.iconRight}>
+                    <EmailIcon width={20} height={20} color="#9CA3AF" />
+                  </View>
+                )}
               </View>
+              <Text style={styles.helperText}>
+                Use `test@example.com` for successful login. Other emails show an error.
+              </Text>
+              {isEmailError && (
+                <View style={styles.errorRow}>
+                  <Text style={styles.errorText}>
+                    Email not recognized. Try `test@example.com`.
+                  </Text>
+                </View>
+              )}
             </View>
 
             {/* Password Input */}
             <View style={styles.inputSection}>
               <Text style={styles.inputLabel}>Password</Text>
-              <View style={[styles.inputWrapper, isError && styles.inputWrapperError]}>
+              <View style={[styles.inputWrapper, isPasswordError && styles.inputWrapperError]}>
                 <TextInput
+                  ref={passwordInputRef}
                   style={styles.input}
                   placeholder="••••••••"
                   placeholderTextColor="#9CA3AF"
                   value={password}
                   onChangeText={(text) => {
                     setPassword(text);
-                    if (isError) setIsError(false);
+                    if (isPasswordError) setIsPasswordError(false);
                   }}
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
+                  returnKeyType="done"
                 />
-                {isError && (
-                  <View style={[styles.iconRight, { marginRight: 8 }]}>
+                {isPasswordError && (
+                  <View style={[styles.iconRight, styles.warningIcon]}>
                     <WarningIcon width={20} height={20} color="#EF4444" />
                   </View>
                 )}
-                <TouchableOpacity style={styles.iconRight}>
-                  <NoViewIcon width={20} height={20} color="#9CA3AF" />
+                <TouchableOpacity
+                  style={styles.iconRight}
+                  onPress={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <EyeOff size={20} color="#9CA3AF" />
+                  ) : (
+                    <Eye size={20} color="#9CA3AF" />
+                  )}
                 </TouchableOpacity>
               </View>
-              
-              {/* Inline Error Message */}
-              {isError && (
+              <Text style={styles.helperText}>
+                Enter `error` to preview password error state.
+              </Text>
+              {isPasswordError && (
                 <View style={styles.errorRow}>
                   <Text style={styles.errorText}>
-                    Incorrect password. Please try again or reset it below.
+                    Incorrect password. This is a demo error state preview.
                   </Text>
                 </View>
               )}

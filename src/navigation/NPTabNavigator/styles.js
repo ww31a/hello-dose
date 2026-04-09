@@ -6,9 +6,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tabBackground,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    height: Platform.OS === 'ios' ? 150 : 120,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 35,
-    paddingTop: 12,
+    height: Platform.OS === 'ios' ? 110 : 108,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 24,
+    paddingTop: 10,
     borderTopWidth: 0,
     // Shadow for iOS
     shadowColor: '#000',

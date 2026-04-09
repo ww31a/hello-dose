@@ -98,6 +98,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     includeFontPadding: false,
   },
+  valueInput: {
+    width: '100%',
+    fontSize: 28,
+    lineHeight: 30,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+    textAlign: 'center',
+    includeFontPadding: false,
+    paddingVertical: 0,
+  },
   decimalPointDot: {
     position: 'absolute',
     left: 0,

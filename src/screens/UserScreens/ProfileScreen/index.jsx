@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ChevronRight } from 'lucide-react-native';
 import FirstAidIcon from '../../../assets/icons/nurse-hat.svg';
 
@@ -15,6 +15,14 @@ import styles from './styles';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const handleLogout = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Welcome' }],
+      })
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -55,7 +63,12 @@ const ProfileScreen = () => {
         <Text style={styles.sectionHeader}>My NP Details</Text>
         <TouchableOpacity 
           style={styles.npCard}
-          onPress={() => navigation.navigate('Home', { screen: 'MyNP' })}
+          onPress={() =>
+            navigation.navigate('Home', {
+              screen: 'MyNP',
+              params: { from: 'Profile' },
+            })
+          }
         >
           <View style={styles.npIconWrapper}>
             <FirstAidIcon width={50} height={50} color="#0D9488" />
@@ -91,7 +104,7 @@ const ProfileScreen = () => {
         <TouchableOpacity>
           <Text style={styles.footerTextLeft}>Manage Subscription</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
+        <TouchableOpacity onPress={handleLogout}>
          <Text style={styles.footerTextRight}>Log Out</Text>
         </TouchableOpacity>
       </View>

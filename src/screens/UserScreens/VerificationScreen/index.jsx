@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { CommonActions, useRoute, useNavigation } from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Input from '../../../components/Input';
@@ -18,12 +18,35 @@ const VerificationScreen = () => {
   const route = useRoute();
   const { email } = route.params;
   const [code, setCode] = useState('');
+  const [isCodeError, setIsCodeError] = useState(false);
+
+  const verifyCode = (value) => {
+    if (value.length !== 6) return;
+    if (value === '666666') {
+      setIsCodeError(false);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'AppTabs' }],
+        })
+      );
+    } else {
+      setIsCodeError(true);
+    }
+  };
+
+  const handleCodeChange = (value) => {
+    const digitsOnly = value.replace(/\D/g, '').slice(0, 6);
+    setCode(digitsOnly);
+    if (isCodeError) setIsCodeError(false);
+
+    if (digitsOnly.length === 6) {
+      verifyCode(digitsOnly);
+    }
+  };
 
   const handleVerify = () => {
-    // For demo: Any 6 digits work
-    if (code.length === 6) {
-      navigation.navigate('AppTabs');
-    }
+    verifyCode(code);
   };
 
   return (
@@ -49,17 +72,27 @@ const VerificationScreen = () => {
           <Text style={styles.subtitle}>
             A 6-digit verification code has been sent to your email
           </Text>
+          <Text style={styles.helperText}>
+            Use `666666` as the correct OTP for successful login.
+          </Text>
 
           <Input
             label="Verification Code"
-            placeholder="e.g. 123456"
+            placeholder="e.g. 666666"
             value={code}
-            onChangeText={setCode}
+            onChangeText={handleCodeChange}
             keyboardType="number-pad"
             maxLength={6}
+            returnKeyType="done"
+            onSubmitEditing={handleVerify}
             icon={Lock}
             containerStyle={styles.inputContainer}
           />
+          {isCodeError && (
+            <Text style={styles.errorText}>
+              Invalid code. Please enter `666666`.
+            </Text>
+          )}
 
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
@@ -74,7 +107,7 @@ const VerificationScreen = () => {
             label="Login"
             onPress={handleVerify}
             disabled={code.length < 6}
-            variant="primary"
+            variant={code.length < 6 ? 'disabled' : 'primary'}
           />
 
           <View style={styles.resendRow}>

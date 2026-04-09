@@ -74,6 +74,17 @@ const styles = StyleSheet.create({
   iconRight: {
     marginLeft: 12,
   },
+  warningIcon: {
+    marginRight: 4,
+  },
+  helperText: {
+    marginTop: 8,
+    paddingHorizontal: 4,
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#6B7280',
+    lineHeight: 18,
+  },
   errorRow: {
     marginTop: 8,
     paddingHorizontal: 4,

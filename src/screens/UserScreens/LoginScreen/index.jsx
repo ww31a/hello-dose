@@ -58,6 +58,9 @@ const LoginScreen = () => {
             icon={Mail}
             containerStyle={styles.inputContainer}
           />
+          <Text style={styles.helperText}>
+            Use `test@example.com` for successful login. Any other email goes to the error screen.
+          </Text>
         </View>
 
         <View style={styles.footer}>
@@ -65,7 +68,7 @@ const LoginScreen = () => {
             label="Login"
             onPress={handleLogin}
             disabled={!email}
-            variant="primary"
+            variant={!email ? 'disabled' : 'primary'}
           />
         </View>
       </View>

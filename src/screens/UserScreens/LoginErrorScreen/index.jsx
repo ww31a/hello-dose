@@ -16,7 +16,7 @@ const LoginErrorScreen = () => {
   const navigation = useNavigation();
 
   const handleRetry = () => {
-    navigation.navigate('Login');
+    navigation.goBack();
   };
 
   return (

@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -15,8 +16,8 @@ import styles from './styles';
 
 const UpdateWeightScreen = () => {
   const navigation = useNavigation();
-  const [wholeNumber, setWholeNumber] = useState(140);
-  const [decimalPart, setDecimalPart] = useState(6);
+  const [wholeNumber, setWholeNumber] = useState('140');
+  const [decimalPart, setDecimalPart] = useState('6');
   const [unit, setUnit] = useState('lbs');
 
   // Format today's date
@@ -24,16 +25,24 @@ const UpdateWeightScreen = () => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-US', options);
 
-  const incrementWhole = () => setWholeNumber(prev => prev + 1);
-  const decrementWhole = () => setWholeNumber(prev => Math.max(0, prev - 1));
+  const incrementWhole = () => {
+    const current = parseInt(wholeNumber || '0', 10) || 0;
+    setWholeNumber(String(current + 1));
+  };
+  const decrementWhole = () => {
+    const current = parseInt(wholeNumber || '0', 10) || 0;
+    setWholeNumber(String(Math.max(0, current - 1)));
+  };
 
   const incrementDecimal = () => {
-    if (decimalPart < 9) setDecimalPart(prev => prev + 1);
-    else setDecimalPart(0);
+    const current = parseInt(decimalPart || '0', 10) || 0;
+    if (current < 999) setDecimalPart(String(current + 1));
+    else setDecimalPart('0');
   };
   const decrementDecimal = () => {
-    if (decimalPart > 0) setDecimalPart(prev => prev - 1);
-    else setDecimalPart(9);
+    const current = parseInt(decimalPart || '0', 10) || 0;
+    if (current > 0) setDecimalPart(String(current - 1));
+    else setDecimalPart('999');
   };
 
   return (
@@ -63,7 +72,18 @@ const UpdateWeightScreen = () => {
               </TouchableOpacity>
               
               <View style={styles.displayBox}>
-                <Text style={styles.valueText}>{wholeNumber}</Text>
+                <TextInput
+                  style={styles.valueInput}
+                  value={wholeNumber}
+                  onChangeText={(text) => setWholeNumber(text.replace(/[^0-9]/g, ''))}
+                  onBlur={() => {
+                    if (!wholeNumber) setWholeNumber('0');
+                  }}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  textAlign="center"
+                  maxLength={4}
+                />
               </View>
               
               <TouchableOpacity style={styles.roundButton} onPress={incrementWhole}>
@@ -83,7 +103,21 @@ const UpdateWeightScreen = () => {
               <View style={styles.displayBox}>
                 <View style={styles.decimalContent}>
                   <View style={styles.decimalPointDot} />
-                  <Text style={styles.valueText}>{decimalPart}</Text>
+                  <TextInput
+                    style={styles.valueInput}
+                    value={decimalPart}
+                    onChangeText={(text) => {
+                      const digits = text.replace(/[^0-9]/g, '');
+                      setDecimalPart(digits.slice(0, 3));
+                    }}
+                    onBlur={() => {
+                      if (!decimalPart) setDecimalPart('0');
+                    }}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                    textAlign="center"
+                    maxLength={3}
+                  />
                 </View>
               </View>
               

@@ -7,14 +7,22 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import Patient from '../../../assets/icons/bottom-Nav/patients-default.svg'
-import Clock from '../../../assets/icons/time.svg'
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import ActivePatientIcon from '../../../assets/icons/active-patient.svg';
+import GreenTimeIcon from '../../../assets/icons/gree-time.svg';
 
 import styles from './styles';
 
 const NPProfileScreen = () => {
   const navigation = useNavigation();
+  const handleLogout = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Welcome' }],
+      })
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -42,7 +50,7 @@ const NPProfileScreen = () => {
         <View style={styles.infoCard}>
           <View style={styles.activeLeft}>
             <View style={styles.activeIconWrapper}>
-              <Patient size={18} color="#3B82F6" />
+              <ActivePatientIcon width={18} height={18} />
             </View>
             <Text style={styles.activeLabel}>ACTIVE PATIENTS</Text>
           </View>
@@ -59,7 +67,7 @@ const NPProfileScreen = () => {
 
           <View style={styles.availabilityRow}>
             <View style={styles.clockIconWrapper}>
-              <Clock size={100} color="#0D9488" />
+              <GreenTimeIcon width={22} height={22} />
             </View>
             <View style={styles.availabilityTextWrap}>
               <Text style={styles.availabilityTitle}>Currently On Shift</Text>
@@ -82,7 +90,7 @@ const NPProfileScreen = () => {
         <TouchableOpacity>
           <Text style={styles.footerText}>Manage Subscription</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
+        <TouchableOpacity onPress={handleLogout}>
           <Text style={styles.footerText}>Log Out</Text>
         </TouchableOpacity>
       </View>

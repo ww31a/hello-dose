@@ -92,7 +92,7 @@ const MyProgramScreen = () => {
         <Text style={styles.sectionHeader}>My NP Details</Text>
         <TouchableOpacity 
           style={styles.npCard}
-          onPress={() => navigation.navigate('MyNP')}
+          onPress={() => navigation.navigate('MyNP', { from: 'MyProgram' })}
         >
           <View style={styles.npIconWrapper}>
             <NurseIcon width={50} height={50} />

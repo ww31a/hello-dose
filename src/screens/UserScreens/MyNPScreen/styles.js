@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 24,
     alignItems: 'center',
+    paddingBottom: 40,
   },
   profileSection: {
     alignItems: 'center',
@@ -166,14 +167,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: Typography.fontFamily.bold,
   },
-  footer: {
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-  },
   ctaButton: {
+    width: '100%',
     height: 56,
     borderRadius: 28,
+    marginVertical: 0,
   },
 });
 

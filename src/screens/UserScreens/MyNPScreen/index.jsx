@@ -6,7 +6,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
@@ -16,13 +16,23 @@ import styles from './styles';
 
 const MyNPScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const [isScheduled, setIsScheduled] = useState(false);
+  const openedFrom = route.params?.from;
+
+  const handleBack = () => {
+    if (openedFrom === 'Profile') {
+      navigation.getParent()?.navigate('Profile');
+      return;
+    }
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <ChevronLeft color={Colors.dark} size={28} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My NP</Text>
@@ -83,12 +93,9 @@ const MyNPScreen = () => {
                 <Text style={styles.statusBadgeText}>In 8 Days</Text>
               </View>
             ) : (
-              <TouchableOpacity
-                style={styles.scheduleButton}
-                onPress={() => navigation.navigate('ScheduleAppointment')}
-              >
+              <View style={styles.scheduleButton}>
                 <Text style={styles.scheduleButtonText}>Schedule Now</Text>
-              </TouchableOpacity>
+              </View>
             )}
           </View>
 
@@ -101,17 +108,14 @@ const MyNPScreen = () => {
           </View>
         </View>
 
-      </ScrollView>
-
-      {/* Footer CTA */}
-      <View style={styles.footer}>
         <Button
           label="Request Check-in or Reorder"
           variant={isScheduled ? 'disabled' : 'primary'}
-          onPress={() => { }}
+          onPress={() => navigation.navigate('ScheduleAppointment')}
           style={styles.ctaButton}
         />
-      </View>
+
+      </ScrollView>
     </SafeAreaView>
   );
 };
