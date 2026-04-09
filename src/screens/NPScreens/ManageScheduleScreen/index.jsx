@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -44,6 +44,18 @@ const DAYS = [
 ];
 
 const ManageScheduleScreen = ({ navigation }) => {
+  const [days, setDays] = useState(DAYS);
+
+  const toggleDay = (dayName) => {
+    setDays((prevDays) =>
+      prevDays.map((day) =>
+        day.name === dayName
+          ? { ...day, enabled: !day.enabled }
+          : day
+      )
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
@@ -62,10 +74,13 @@ const ManageScheduleScreen = ({ navigation }) => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Set Your Availability</Text>
 
-          {DAYS.map((day, index) => (
+          {days.map((day, index) => (
             <View key={day.name} style={styles.daySection}>
               <View style={styles.dayHeader}>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => toggleDay(day.name)}
+                >
                   {day.enabled ? (
                     <ToggleOnIcon width={26} height={16} />
                   ) : (

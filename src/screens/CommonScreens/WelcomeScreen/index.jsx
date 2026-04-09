@@ -23,6 +23,7 @@ const WelcomeScreen = () => {
       style={styles.background}
       resizeMode="cover"
     >
+      <View style={styles.overlay} />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           {/* Logo Section */}

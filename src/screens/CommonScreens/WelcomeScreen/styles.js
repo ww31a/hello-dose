@@ -7,14 +7,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#00000033',
+  },
   safeArea: {
     flex: 1,
+    zIndex: 1,
   },
   container: {
     flex: 1,
     paddingHorizontal: 24,
     justifyContent: 'space-between',
     paddingBottom: 20,
+    zIndex: 1,
   },
   logoContainer: {
     alignItems: 'center',
