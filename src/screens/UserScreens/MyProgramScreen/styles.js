@@ -93,11 +93,25 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
+  infoCardInteractive: {
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  infoCardPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.98 }],
+  },
+  infoCardTopRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   infoCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
     gap: 8,
+    flex: 1,
   },
   infoIconWrapper: {
     width: 44,
@@ -119,9 +133,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   infoSubValue: {
-    fontSize: 12,
-    fontFamily: Typography.fontFamily.medium,
-    color: '#94A3B8',
+    fontSize: 10,
+    fontFamily: Typography.fontFamily.regular,
+    color: '#64748B',
   },
   weightCard: {
     backgroundColor: '#1E1E26',

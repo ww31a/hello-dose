@@ -194,28 +194,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     marginBottom: 16,
   },
-  nextCheckinRow: {
+  cardContent: {
+    width: '100%',
+  },
+  nextCheckinHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    alignItems: 'flex-start',
+    marginBottom: 4,
   },
   nextCheckinText: {
     fontSize: 18,
     color: '#9CA3AF',
     fontFamily: Typography.fontFamily.medium,
-    maxWidth: 180,
   },
   scheduleBtn: {
     backgroundColor: '#1E1E26',
     borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginTop: -2,
   },
   scheduleBtnText: {
     color: '#FFFFFF',

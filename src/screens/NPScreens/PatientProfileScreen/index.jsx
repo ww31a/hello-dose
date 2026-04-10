@@ -40,14 +40,14 @@ const PatientProfileScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.infoCard}>
-          <View style={styles.nextCheckinRow}>
-            <View>
+          <View style={styles.cardContent}>
+            <View style={styles.nextCheckinHeader}>
               <Text style={styles.cardPreTitle}>NEXT CHECKIN</Text>
-              <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
+              <View style={styles.scheduleBtn}>
+                <Text style={styles.scheduleBtnText}>Schedule Now</Text>
+              </View>
             </View>
-            <Text style={styles.scheduleBtn}>
-              <Text style={styles.scheduleBtnText}>Schedule Now</Text>
-            </Text>
+            <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
           </View>
         </View>
 

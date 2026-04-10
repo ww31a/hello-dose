@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Pressable,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,8 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { Colors } from '../../../theme';
-import Button from '../../../components/Button';
-
 // SVG Icons from assets/icons
 import DrugIcon from '../../../assets/icons/drug.svg';
 import CalendarIcon from '../../../assets/icons/calender-3.svg';
@@ -54,14 +53,13 @@ const MyProgramScreen = () => {
         <View style={styles.infoRow}>
           <InfoCard
             icon={DrugIcon}
-            iconBg="#EFF6FF"
             label="DOSAGE"
             value="2mg"
             subValue="Last Injection: 1 day ago"
+            onPress={() => navigation.navigate('InjectionLogs')}
           />
           <InfoCard
             icon={CalendarIcon}
-            iconBg="#FEFCE8"
             label="NEXT REFILL"
             value="Feb 10"
             subValue="In 3 weeks"
@@ -152,15 +150,26 @@ const CircularProgress = ({ size, strokeWidth, progress }) => {
   );
 };
 
-const InfoCard = ({ icon: Icon, iconBg, label, value, subValue }) => (
-  <View style={styles.infoCard}>
-    <View style={styles.infoCardHeader}>
-      <Icon width={30} height={30} />
-      <Text style={styles.infoLabel}>{label}</Text>
+const InfoCard = ({ icon: Icon, label, value, subValue, onPress }) => (
+  <Pressable
+    style={({ pressed }) => [
+      styles.infoCard,
+      onPress && styles.infoCardInteractive,
+      pressed && onPress && styles.infoCardPressed,
+    ]}
+    onPress={onPress}
+    disabled={!onPress}
+  >
+    <View style={styles.infoCardTopRow}>
+      <View style={styles.infoCardHeader}>
+        <Icon width={30} height={30} />
+        <Text style={styles.infoLabel}>{label}</Text>
+      </View>
+      {onPress ? <ChevronRight color="#94A3B8" size={18} /> : null}
     </View>
     <Text style={styles.infoValue}>{value}</Text>
     <Text style={styles.infoSubValue}>{subValue}</Text>
-  </View>
+  </Pressable>
 );
 
 export default MyProgramScreen;
