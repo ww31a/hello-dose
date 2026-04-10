@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
   ImageBackground,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +18,28 @@ const WelcomeScreen = () => {
     navigation.navigate('Login');
   };
 
+  const logoTranslateY = useRef(new Animated.Value(-80)).current;
+  const logoOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.delay(500),
+      Animated.parallel([
+        Animated.spring(logoTranslateY, {
+          toValue: 0,
+          tension: 40,
+          friction: 10,
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, []);
+
   return (
     <ImageBackground
       source={require('../../../assets/images/home-background.jpg')}
@@ -26,10 +49,19 @@ const WelcomeScreen = () => {
       <View style={styles.overlay} />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
+
           {/* Logo Section */}
-          <View style={styles.logoContainer}>
+          <Animated.View
+            style={[
+              styles.logoContainer,
+              {
+                opacity: logoOpacity,
+                transform: [{ translateY: logoTranslateY }],
+              },
+            ]}
+          >
             <Text style={styles.logoText}>hello dose.</Text>
-          </View>
+          </Animated.View>
 
           {/* Bottom Content Section */}
           <View style={styles.bottomContent}>
@@ -67,6 +99,7 @@ const WelcomeScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
+
         </View>
       </SafeAreaView>
     </ImageBackground>
