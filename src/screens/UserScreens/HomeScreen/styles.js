@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#0D9488',
     borderRadius: 16,
-    paddingTop: 12,
-    paddingBottom: 14,
+    paddingTop: 18,
+    paddingBottom: 18,
     paddingHorizontal: 12,
     marginBottom: 16,
     position: 'relative',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   sectionHeader: {
-    marginVertical: 16,
+    marginVertical: 8,
   },
   sectionTitle: {
     fontSize: 20,

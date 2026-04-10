@@ -88,6 +88,32 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     fontFamily: Typography.fontFamily.medium,
   },
+  stateToggleRow: {
+    flexDirection: 'row',
+    backgroundColor: '#ECEFF3',
+    borderRadius: 16,
+    padding: 4,
+    marginBottom: 8,
+  },
+  stateToggleBtn: {
+    flex: 1,
+    height: 34,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stateToggleBtnActive: {
+    backgroundColor: '#FFFFFF',
+  },
+  stateToggleText: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#64748B',
+  },
+  stateToggleTextActive: {
+    color: '#1E1E26',
+    fontFamily: Typography.fontFamily.bold,
+  },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
@@ -210,6 +236,16 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     fontFamily: Typography.fontFamily.medium,
   },
+  nextCheckinValue: {
+    fontSize: 18,
+    color: '#1E1E26',
+    fontFamily: Typography.fontFamily.bold,
+  },
+  nextCheckinTime: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontFamily: Typography.fontFamily.medium,
+  },
   scheduleBtn: {
     backgroundColor: '#1E1E26',
     borderRadius: 20,
@@ -219,6 +255,17 @@ const styles = StyleSheet.create({
   },
   scheduleBtnText: {
     color: '#FFFFFF',
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.regular,
+  },
+  statusBadge: {
+    backgroundColor: '#F0FDFA',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  statusBadgeText: {
+    color: '#0D9488',
     fontSize: 12,
     fontFamily: Typography.fontFamily.bold,
   },

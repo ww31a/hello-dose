@@ -82,7 +82,7 @@ const MyNPScreen = () => {
             <View style={styles.cardContent}>
               <Text style={styles.cardLabel}>NEXT CHECKIN</Text>
               {isScheduled ? (
-                <Text style={styles.cardValue}>Feb 20, 2026 <Text style={{ fontSize: 14, fontFamily: 'PlusJakartaSans-Medium' }}>at 3pm EST</Text></Text>
+                <Text style={styles.cardValue}>Feb 20, 2026 <Text style={{ fontSize: 16, fontFamily: 'PlusJakartaSans-Regular', color: '#6B7280' }}>at 3pm EST</Text></Text>
               ) : (
                 <Text style={[styles.cardValue, styles.placeholderValue]}>No check-in scheduled</Text>
               )}

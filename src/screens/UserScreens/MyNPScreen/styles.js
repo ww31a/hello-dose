@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   cardValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
   },
@@ -146,15 +146,14 @@ const styles = StyleSheet.create({
   },
   scheduleButton: {
     backgroundColor: Colors.dark,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 20,
-    marginTop: 2,
   },
   scheduleButtonText: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontFamily: Typography.fontFamily.bold,
+    fontFamily: Typography.fontFamily.regular,
   },
   statusBadge: {
     backgroundColor: '#F0FDFA',
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
   statusBadgeText: {
     color: Colors.primary,
     fontSize: 12,
-    fontFamily: Typography.fontFamily.bold,
+    fontFamily: Typography.fontFamily.regular,
   },
   ctaButton: {
     width: '100%',

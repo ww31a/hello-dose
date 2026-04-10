@@ -151,25 +151,27 @@ const HomeScreen = () => {
         </View>
 
         {/* Something on Your Mind? */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Something on Your Mind?</Text>
-        </View>
-        <View style={styles.actionCardContainer}>
-          <View style={styles.actionCard}>
-            <FirstAidIcon width={50} height={50} style={styles.actionIcon} />
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Ask an NP</Text>
-              <Text style={styles.actionSubtitle}>Get answers from a Nurse Practitioner</Text>
-            </View>
-            <ChevronRight color="#CBD5E1" size={20} />
+        {!showComingSoonPopup && (
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Something on Your Mind?</Text>
           </View>
-
-          {showComingSoonPopup && (
-            <View style={styles.comingSoonOverlay}>
-              <Text style={styles.comingSoonText}>COMING SOON</Text>
+        )}
+        {!showComingSoonPopup && (
+          <View style={styles.actionCardContainer}>
+            <View style={styles.actionCard}>
+              <FirstAidIcon width={50} height={50} style={styles.actionIcon} />
+              <View style={styles.actionContent}>
+                <Text style={styles.actionTitle}>Ask an NP</Text>
+                <Text style={styles.actionSubtitle}>Get answers from a Nurse Practitioner</Text>
+              </View>
+              <ChevronRight color="#CBD5E1" size={20} />
             </View>
-          )}
-        </View>
+            {/* <View style={styles.comingSoonOverlay}>
+              <Text style={styles.comingSoonText}>COMING SOON</Text>
+            </View> */}
+          </View>
+        )}
+
 
         {/* Coming Up Section */}
         <View style={styles.sectionHeader} />
@@ -194,10 +196,12 @@ const HomeScreen = () => {
         </View>
 
         {/* Refer a Friend Button */}
-        <TouchableOpacity style={styles.referButton}>
-          <HeartIcon width={24} height={24} />
-          <Text style={styles.referText}>REFER A FRIEND</Text>
-        </TouchableOpacity>
+        {!showComingSoonPopup && (
+          <TouchableOpacity style={styles.referButton}>
+            <HeartIcon width={24} height={24} />
+            <Text style={styles.referText}>REFER A FRIEND</Text>
+          </TouchableOpacity>
+        )}
 
       </ScrollView>
 

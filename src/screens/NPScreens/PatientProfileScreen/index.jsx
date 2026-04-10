@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
@@ -8,6 +8,8 @@ import styles from './styles';
 
 const PatientProfileScreen = ({ navigation, route }) => {
   const { patient } = route.params;
+  const [isScheduled, setIsScheduled] = useState(false);
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView
@@ -39,15 +41,46 @@ const PatientProfileScreen = ({ navigation, route }) => {
           </View>
         </View>
 
+        <View style={styles.stateToggleRow}>
+          <TouchableOpacity
+            style={[styles.stateToggleBtn, !isScheduled && styles.stateToggleBtnActive]}
+            onPress={() => setIsScheduled(false)}
+          >
+            <Text style={[styles.stateToggleText, !isScheduled && styles.stateToggleTextActive]}>
+              No check-in
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.stateToggleBtn, isScheduled && styles.stateToggleBtnActive]}
+            onPress={() => setIsScheduled(true)}
+          >
+            <Text style={[styles.stateToggleText, isScheduled && styles.stateToggleTextActive]}>
+              Scheduled
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.infoCard}>
           <View style={styles.cardContent}>
             <View style={styles.nextCheckinHeader}>
               <Text style={styles.cardPreTitle}>NEXT CHECKIN</Text>
-              <View style={styles.scheduleBtn}>
-                <Text style={styles.scheduleBtnText}>Schedule Now</Text>
-              </View>
+              {isScheduled ? (
+                <View style={styles.statusBadge}>
+                  <Text style={styles.statusBadgeText}>In 8 Days</Text>
+                </View>
+              ) : (
+                <View style={styles.scheduleBtn}>
+                  <Text style={styles.scheduleBtnText}>Schedule Now</Text>
+                </View>
+              )}
             </View>
-            <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
+            {isScheduled ? (
+              <Text style={styles.nextCheckinValue}>
+                Feb 20, 2026 <Text style={styles.nextCheckinTime}>at 3pm EST</Text>
+              </Text>
+            ) : (
+              <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
+            )}
           </View>
         </View>
 
