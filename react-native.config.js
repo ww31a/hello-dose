@@ -1,3 +1,5 @@
 module.exports = {
-    assets: ['./src/assets/fonts/'], // <-- path to your fonts
+  // Keep the asset config explicit so Gradle autolinking cache refreshes
+  // when native project metadata changes.
+  assets: ['./src/assets/fonts/'],
 };

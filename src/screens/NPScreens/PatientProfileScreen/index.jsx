@@ -85,7 +85,7 @@ const PatientProfileScreen = ({ navigation, route }) => {
         </View>
 
         <Button
-          label="Request Check-in or Reorder"
+          label={isScheduled ? "Reschedule" : "Request Check-in or Reorder"}
           variant="primary"
           onPress={() => { }}
           style={styles.ctaButton}

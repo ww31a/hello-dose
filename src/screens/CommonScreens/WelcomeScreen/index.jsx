@@ -20,6 +20,8 @@ const WelcomeScreen = () => {
 
   const logoTranslateY = useRef(new Animated.Value(-80)).current;
   const logoOpacity = useRef(new Animated.Value(0)).current;
+  const contentOpacity = useRef(new Animated.Value(0)).current;
+  const contentTranslateY = useRef(new Animated.Value(16)).current;
 
   useEffect(() => {
     Animated.sequence([
@@ -27,13 +29,26 @@ const WelcomeScreen = () => {
       Animated.parallel([
         Animated.spring(logoTranslateY, {
           toValue: 0,
-          tension: 40,
-          friction: 10,
+          tension: 60,
+          friction: 8,
           useNativeDriver: true,
         }),
         Animated.timing(logoOpacity, {
           toValue: 1,
           duration: 1200,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.delay(150),
+      Animated.parallel([
+        Animated.timing(contentOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(contentTranslateY, {
+          toValue: 0,
+          duration: 800,
           useNativeDriver: true,
         }),
       ]),
@@ -64,7 +79,15 @@ const WelcomeScreen = () => {
           </Animated.View>
 
           {/* Bottom Content Section */}
-          <View style={styles.bottomContent}>
+          <Animated.View
+            style={[
+              styles.bottomContent,
+              {
+                opacity: contentOpacity,
+                transform: [{ translateY: contentTranslateY }],
+              },
+            ]}
+          >
             <Text style={styles.tagline}>
               Your Holistic{'\n'}Health Coach
             </Text>
@@ -98,7 +121,7 @@ const WelcomeScreen = () => {
                 <Text style={styles.legalLink}>Terms of Service</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </Animated.View>
 
         </View>
       </SafeAreaView>
