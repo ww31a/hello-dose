@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -22,11 +22,15 @@ import DropletIcon from '../../../assets/icons/droplet-icon.svg';
 import FirstAidIcon from '../../../assets/icons/firstAID-icon.svg';
 import HeartIcon from '../../../assets/icons/heart.svg';
 import VideoPlayIcon from '../../../assets/icons/video-play.svg';
+import CalenderIcon from '../../../assets/icons/calender.svg';
+import CrossIcon from '../../../assets/icons/cross.svg';
 
 import styles from './styles';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [showNotificationBar, setShowNotificationBar] = useState(false);
+  const [showComingSoonPopup, setShowComingSoonPopup] = useState(false);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -40,12 +44,59 @@ const HomeScreen = () => {
           <Text style={styles.headerTitle}>Welcome back, Natalia</Text>
         </View>
 
+        <View style={styles.toggleRow}>
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={() => setShowNotificationBar(prev => !prev)}
+          >
+            <Text style={styles.toggleButtonText}>
+              {showNotificationBar ? 'Hide notification bar' : 'Show notification bar'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={() => setShowComingSoonPopup(prev => !prev)}
+          >
+            <Text style={styles.toggleButtonText}>
+              {showComingSoonPopup ? 'Hide coming soon' : 'Show coming soon'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {showNotificationBar && (
+          <View style={styles.notificationBar}>
+            <View style={styles.notificationIconWrap}>
+              <CalenderIcon width={30} height={30} />
+            </View>
+
+            <View style={styles.notificationTextWrap}>
+              <Text style={styles.notificationTitle}>Upcoming appointment</Text>
+              <Text style={styles.notificationSubtitle}>
+                Your call with NP Bracha is in 1d 12hr
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.notificationClose}
+              onPress={() => setShowNotificationBar(false)}
+            >
+              <CrossIcon width={14} height={14} />
+            </TouchableOpacity>
+
+            <View style={styles.notificationDots}>
+              <View style={styles.notificationDotActive} />
+              <View style={styles.notificationDotInactive} />
+            </View>
+          </View>
+        )}
+
         {/* Current Program Card */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardLabel}>YOUR CURRENT PROGRAM</Text>
           </View>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.programRow}
             onPress={() => navigation.navigate('MyProgram')}
           >
@@ -101,18 +152,25 @@ const HomeScreen = () => {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Something on Your Mind?</Text>
         </View>
-        <View style={styles.actionCard}>
-          <FirstAidIcon width={50} height={50} style={styles.actionIcon} />
-          <View style={styles.actionContent}>
-            <Text style={styles.actionTitle}>Ask an NP</Text>
-            <Text style={styles.actionSubtitle}>Get answers from a Nurse Practitioner</Text>
+        <View style={styles.actionCardContainer}>
+          <View style={styles.actionCard}>
+            <FirstAidIcon width={50} height={50} style={styles.actionIcon} />
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Ask an NP</Text>
+              <Text style={styles.actionSubtitle}>Get answers from a Nurse Practitioner</Text>
+            </View>
+            <ChevronRight color="#CBD5E1" size={20} />
           </View>
-          <ChevronRight color="#CBD5E1" size={20} />
+
+          {showComingSoonPopup && (
+            <View style={styles.comingSoonOverlay}>
+              <Text style={styles.comingSoonText}>COMING SOON</Text>
+            </View>
+          )}
         </View>
 
         {/* Coming Up Section */}
-        <View style={styles.sectionHeader}>
-        </View>
+        <View style={styles.sectionHeader} />
         <View style={styles.comingUpCard}>
           <View style={styles.comingUpHeader}>
             <View>
@@ -140,6 +198,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
 
       </ScrollView>
+
     </SafeAreaView>
   );
 };

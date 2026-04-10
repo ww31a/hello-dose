@@ -86,20 +86,6 @@ const LogInjectionScreen = () => {
                 <Text style={styles.inputText}>02/12/2025</Text>
                 <CalendarIcon width={20} height={20} />
               </View>
-              <View style={styles.toggleRow}>
-                <TouchableOpacity
-                  onPress={() => setDateType('Today')}
-                  style={[styles.toggleBtn, dateType === 'Today' && styles.toggleBtnActive]}
-                >
-                  <Text style={[styles.toggleText, dateType === 'Today' && styles.toggleTextActive]}>TODAY</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setDateType('Yesterday')}
-                  style={[styles.toggleBtn, dateType === 'Yesterday' && styles.toggleBtnActive]}
-                >
-                  <Text style={[styles.toggleText, dateType === 'Yesterday' && styles.toggleTextActive]}>YESTERDAY</Text>
-                </TouchableOpacity>
-              </View>
             </View>
 
             <View style={styles.dateTimeField}>
@@ -107,20 +93,6 @@ const LogInjectionScreen = () => {
               <View style={styles.inputWrapper}>
                 <Text style={styles.inputText}>09:00 AM</Text>
                 <TimeIcon width={40} height={40} />
-              </View>
-              <View style={styles.toggleRow}>
-                <TouchableOpacity
-                  onPress={() => setTimeType('Now')}
-                  style={[styles.toggleBtn, timeType === 'Now' && styles.toggleBtnActive]}
-                >
-                  <Text style={[styles.toggleText, timeType === 'Now' && styles.toggleTextActive]}>NOW</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setTimeType('Morning')}
-                  style={[styles.toggleBtn, timeType === 'Morning' && styles.toggleBtnActive]}
-                >
-                  <Text style={[styles.toggleText, timeType === 'Morning' && styles.toggleTextActive]}>MORNING</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
