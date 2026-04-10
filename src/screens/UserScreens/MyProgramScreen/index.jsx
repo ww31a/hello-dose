@@ -47,7 +47,7 @@ const MyProgramScreen = () => {
             </View>
           </View>
           <Text style={styles.programTitle}>DROP Tirzepatide</Text>
-          <Text style={styles.programSubtitle}>4 of 8 Months Completed</Text>
+          <Text style={styles.programSubtitle}>20 of 40 Pounds Lost</Text>
         </View>
 
         {/* Info Cards Row */}
@@ -57,7 +57,7 @@ const MyProgramScreen = () => {
             iconBg="#EFF6FF"
             label="DOSAGE"
             value="2mg"
-            subValue="Last: 1 day ago"
+            subValue="Last Injection: 1 day ago"
           />
           <InfoCard
             icon={CalendarIcon}
@@ -70,7 +70,7 @@ const MyProgramScreen = () => {
 
         {/* Weight Logging Card */}
         <View style={styles.weightCard}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.weightContent}
             onPress={() => navigation.navigate('WeightTrend')}
           >
@@ -80,7 +80,7 @@ const MyProgramScreen = () => {
               <Text style={styles.weightUnit}>lbs</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.logWeightButton}
             onPress={() => navigation.navigate('WeightTrend')}
           >
@@ -90,7 +90,7 @@ const MyProgramScreen = () => {
 
         {/* My NP Details */}
         <Text style={styles.sectionHeader}>My NP Details</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.npCard}
           onPress={() => navigation.navigate('MyNP', { from: 'MyProgram' })}
         >

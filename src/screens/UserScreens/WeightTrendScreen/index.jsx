@@ -61,7 +61,7 @@ const WeightTrendScreen = () => {
               </View>
             </View>
           </View>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.updateButton}
             onPress={() => navigation.navigate('UpdateWeight')}
           >
@@ -85,13 +85,12 @@ const WeightTrendScreen = () => {
           <EntryItem
             date="30"
             weight="144"
-            time="8:45 AM • Normal Entry"
+            time="8:45 AM"
           />
           <EntryItem
             date="15"
             weight="146"
-            time="2:30 PM • NP Check-in"
-            isSpecial
+            time="2:30 PM"
           />
         </View>
 
@@ -244,8 +243,8 @@ const WeightChart = () => {
 
 const EntryItem = ({ date, weight, time, isSpecial }) => (
   <TouchableOpacity style={styles.entryItem}>
-    <View style={[styles.dateCircle, isSpecial && styles.specialCircle]}>
-      <Text style={[styles.dateText, isSpecial && styles.specialDateText]}>{date}</Text>
+    <View style={[styles.dateCircle]}>
+      <Text style={[styles.dateText]}>{date}</Text>
     </View>
     <View style={styles.entryContent}>
       <View style={styles.entryHeader}>

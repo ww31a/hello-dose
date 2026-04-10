@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
   insightRow: {
     flexDirection: 'row',
     gap: 12,
+    marginTop: 12,
   },
   insightBlock: {
     flex: 1,
@@ -185,8 +186,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   insightSub: {
-    fontSize: 11,
-    color: '#64748B',
+    fontSize: 10,
+    color: '#94A3B8',
     fontFamily: Typography.fontFamily.medium,
   },
   infoCard: {

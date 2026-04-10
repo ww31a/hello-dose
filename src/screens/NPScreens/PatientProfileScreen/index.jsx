@@ -6,7 +6,8 @@ import Button from '../../../components/Button';
 
 import styles from './styles';
 
-const PatientProfileScreen = ({ navigation }) => {
+const PatientProfileScreen = ({ navigation, route }) => {
+  const { patient } = route.params;
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView
@@ -29,17 +30,38 @@ const PatientProfileScreen = ({ navigation }) => {
               style={styles.avatarImage}
             />
           </View>
-          <Text style={styles.name}>Natalia Ussher</Text>
+          <Text style={styles.name}>{patient.name}</Text>
           <View style={styles.medTag}>
-            <Text style={styles.medTagText}>TIRZEPATIDE</Text>
+            <Text style={styles.medTagText}>{patient.drug}</Text>
           </View>
-          <View style={styles.badge}><Text style={styles.badgeText}>Started Oct 2025</Text></View>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>Started Oct 2025</Text>
+          </View>
         </View>
+
+        <View style={styles.infoCard}>
+          <View style={styles.nextCheckinRow}>
+            <View>
+              <Text style={styles.cardPreTitle}>NEXT CHECKIN</Text>
+              <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
+            </View>
+            <Text style={styles.scheduleBtn}>
+              <Text style={styles.scheduleBtnText}>Schedule Now</Text>
+            </Text>
+          </View>
+        </View>
+
+        <Button
+          label="Request Check-in or Reorder"
+          variant="primary"
+          onPress={() => { }}
+          style={styles.ctaButton}
+        />
 
         <View style={styles.card}>
           <Text style={styles.cardPreTitle}>ACTIVE PROGRAM</Text>
-          <Text style={styles.programTitle}>Tirzepatide</Text>
-          <Text style={styles.progressText}>4 of 8 Months Completed</Text>
+          <Text style={styles.programTitle}>{patient.drug.charAt(0) + patient.drug.slice(1).toLowerCase()}</Text>
+          <Text style={styles.progressText}>20 of 40 Pounds Lost</Text>
           <View style={styles.progressBarContainer}>
             <View style={[styles.progressBarFill, { width: '50%' }]} />
           </View>
@@ -55,38 +77,40 @@ const PatientProfileScreen = ({ navigation }) => {
           <View style={styles.insightRow}>
             <View style={styles.insightBlock}>
               <Text style={styles.insightLabel}>LAST LOGGED</Text>
-              <Text style={styles.insightValue}>184.2 lbs</Text>
-              <Text style={styles.insightSub}>Today</Text>
+              <Text style={styles.insightValue}>{patient.lastWeight} {patient.lastWeightUnit}</Text>
+              <Text style={styles.insightSub}>{patient.lastLoggedTime}</Text>
             </View>
             <View style={styles.insightBlock}>
               <Text style={styles.insightLabel}>TOTAL LOSS</Text>
-              <Text style={styles.insightValueTeal}>-12.5%</Text>
-              <Text style={styles.insightSub}>Since Jan 12</Text>
+              <Text style={styles.insightValueTeal}>{patient.totalLoss}%</Text>
+              <Text style={styles.insightSub}>{patient.lossDate}</Text>
+            </View>
+          </View>
+
+          <View style={styles.insightRow}>
+            <View style={styles.insightBlock}>
+              <Text style={styles.insightLabel}>DOSAGE</Text>
+              <Text style={styles.insightValue}>2mg</Text>
+              <Text style={styles.insightSub}>Last Injection: 1 day ago</Text>
+            </View>
+            <View style={styles.insightBlock}>
+              <Text style={styles.insightLabel}>NEXT REFILL</Text>
+              <Text style={styles.insightValue}>Feb 10</Text>
+              <Text style={styles.insightSub}>In 3 weeks</Text>
             </View>
           </View>
         </View>
-
-        <View style={styles.infoCard}>
-          <View style={styles.nextCheckinRow}>
-            <View>
-              <Text style={styles.cardPreTitle}>NEXT CHECKIN</Text>
-              <Text style={styles.nextCheckinText}>No check-in scheduled</Text>
-            </View>
-            <TouchableOpacity style={styles.scheduleBtn}>
-              <Text style={styles.scheduleBtnText}>Schedule Now</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <Button
-          label="Request Check-in or Reorder"
-          variant="primary"
-          onPress={() => {}}
-          style={styles.ctaButton}
-        />
 
         <View style={styles.detailsCard}>
           <Text style={styles.cardPreTitle}>PATIENT DETAILS</Text>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Gender</Text>
+            <Text style={styles.detailValue}>{patient.gender}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Age</Text>
+            <Text style={styles.detailValue}>{patient.age}</Text>
+          </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Email</Text>
             <Text style={styles.detailValue}>natalia@example.com</Text>

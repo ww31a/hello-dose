@@ -16,9 +16,13 @@ import styles from './styles';
 const VerificationScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { email } = route.params;
+  const { email, userType } = route.params;
   const [code, setCode] = useState('');
   const [isCodeError, setIsCodeError] = useState(false);
+  const isNPLogin = userType === 'np';
+  const loginBadgeText = isNPLogin ? 'NP Login' : 'Patient Login';
+  const loginRouteName = isNPLogin ? 'NPLogin' : 'Login';
+  const appRouteName = isNPLogin ? 'NPTabs' : 'AppTabs';
 
   const verifyCode = (value) => {
     if (value.length !== 6) return;
@@ -27,7 +31,7 @@ const VerificationScreen = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'AppTabs' }],
+          routes: [{ name: appRouteName }],
         })
       );
     } else {
@@ -62,7 +66,7 @@ const VerificationScreen = () => {
 
         <View style={styles.content}>
           <Text style={styles.welcomeText}>
-            Welcome back! <Text style={styles.patientBadge}>Patient Login</Text>
+            Welcome back! <Text style={styles.patientBadge}>{loginBadgeText}</Text>
           </Text>
 
           <Text style={styles.heading}>
@@ -96,7 +100,7 @@ const VerificationScreen = () => {
 
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity onPress={() => navigation.navigate(loginRouteName)}>
               <Text style={styles.changeEmailLink}>Change Email</Text>
             </TouchableOpacity>
           </View>

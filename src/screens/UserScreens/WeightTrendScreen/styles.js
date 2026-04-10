@@ -162,21 +162,15 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F3F4F6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
   },
-  specialCircle: {
-    backgroundColor: '#F0FDFA',
-  },
   dateText: {
     fontSize: 16,
     fontFamily: Typography.fontFamily.bold,
-    color: Colors.dark,
-  },
-  specialDateText: {
-    color: Colors.primary,
+    color: '#6B7280',
   },
   entryContent: {
     flex: 1,

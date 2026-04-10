@@ -23,7 +23,7 @@ const WelcomeScreen = () => {
 
   useEffect(() => {
     Animated.sequence([
-      Animated.delay(500),
+      Animated.delay(300),
       Animated.parallel([
         Animated.spring(logoTranslateY, {
           toValue: 0,
@@ -33,7 +33,7 @@ const WelcomeScreen = () => {
         }),
         Animated.timing(logoOpacity, {
           toValue: 1,
-          duration: 800,
+          duration: 1200,
           useNativeDriver: true,
         }),
       ]),

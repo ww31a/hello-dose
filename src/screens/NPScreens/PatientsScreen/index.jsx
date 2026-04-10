@@ -86,7 +86,12 @@ const PatientsScreen = ({ navigation }) => {
 
         {/* Patient Cards */}
         {PATIENTS_DATA.map((patient) => (
-          <View key={patient.id} style={styles.patientCard}>
+          <TouchableOpacity
+            key={patient.id}
+            style={styles.patientCard}
+            onPress={() => navigation.navigate('PatientProfile', { patient })}
+            activeOpacity={0.8}
+          >
             {/* Name + Tag */}
             <View style={styles.cardHeaderRow}>
               <Text style={styles.patientName}>{patient.name}</Text>
@@ -117,15 +122,7 @@ const PatientsScreen = ({ navigation }) => {
             </View>
 
             {/* Eligibility Footer */}
-            <TouchableOpacity
-              style={styles.eligibilityRow}
-              activeOpacity={patient.id === '1' ? 0.7 : 1}
-              onPress={
-                patient.id === '1'
-                  ? () => navigation.navigate('PatientProfile')
-                  : undefined
-              }
-            >
+            <View style={styles.eligibilityRow}>
               <View style={styles.eligibilityLeft}>
                 {patient.eligible ? (
                   <TickIcon width={20} height={20} color="#0D9488" />
@@ -137,8 +134,8 @@ const PatientsScreen = ({ navigation }) => {
                 </Text>
               </View>
               <ChevronRight size={18} color={patient.eligible ? '#0D9488' : '#64748B'} />
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </SafeAreaView>

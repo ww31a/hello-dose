@@ -92,17 +92,19 @@ const HomeScreen = () => {
         )}
 
         {/* Current Program Card */}
-        <View style={styles.card}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('MyProgram')}
+        >
           <View style={styles.cardHeader}>
             <Text style={styles.cardLabel}>YOUR CURRENT PROGRAM</Text>
           </View>
-          <TouchableOpacity
-            style={styles.programRow}
-            onPress={() => navigation.navigate('MyProgram')}
-          >
+
+          <View style={styles.programRow}>
             <Text style={styles.programTitle}>DROP Tirzepatide</Text>
             <ChevronRight color={Colors.dark} size={24} />
-          </TouchableOpacity>
+          </View>
+
           <Text style={styles.cardSubtitle}>Last Injection: 3 days ago</Text>
 
           <View style={styles.buttonRow}>
@@ -120,7 +122,7 @@ const HomeScreen = () => {
               style={styles.cardButton}
             />
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Daily Reminders Card */}
         <View style={styles.card}>
