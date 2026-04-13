@@ -76,19 +76,20 @@ const ManageScheduleScreen = ({ navigation }) => {
 
           {days.map((day, index) => (
             <View key={day.name} style={styles.daySection}>
-              <View style={styles.dayHeader}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => toggleDay(day.name)}
-                >
+              <TouchableOpacity
+                style={styles.dayHeader}
+                activeOpacity={0.8}
+                onPress={() => toggleDay(day.name)}
+              >
+                <View style={styles.toggleIcon}>
                   {day.enabled ? (
                     <ToggleOnIcon width={26} height={16} />
                   ) : (
                     <ToggleOffIcon width={26} height={16} />
                   )}
-                </TouchableOpacity>
+                </View>
                 <Text style={styles.dayName}>{day.name}</Text>
-              </View>
+              </TouchableOpacity>
 
               {day.enabled && day.slots.length > 0 && (
                 <View style={styles.slotList}>

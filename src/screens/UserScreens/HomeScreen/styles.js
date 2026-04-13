@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   sectionHeader: {
-    marginVertical: 8,
+    marginVertical: 4,
   },
   sectionTitle: {
     fontSize: 20,

@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.sm + 2,
+    paddingVertical: Spacing.xs,
+  },
+  toggleIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: moderateScale(26),
   },
   dayName: {
     marginLeft: Spacing.sm,

@@ -54,14 +54,14 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.toggleButton}
             onPress={() => setShowComingSoonPopup(prev => !prev)}
           >
             <Text style={styles.toggleButtonText}>
               {showComingSoonPopup ? 'Hide coming soon' : 'Show coming soon'}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {showNotificationBar && (
@@ -150,7 +150,7 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* Something on Your Mind? */}
+        {/* Something on Your Mind?
         {!showComingSoonPopup && (
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Something on Your Mind?</Text>
@@ -166,11 +166,11 @@ const HomeScreen = () => {
               </View>
               <ChevronRight color="#CBD5E1" size={20} />
             </View>
-            {/* <View style={styles.comingSoonOverlay}>
+            <View style={styles.comingSoonOverlay}>
               <Text style={styles.comingSoonText}>COMING SOON</Text>
-            </View> */}
+            </View>
           </View>
-        )}
+        )} */}
 
 
         {/* Coming Up Section */}
@@ -196,12 +196,12 @@ const HomeScreen = () => {
         </View>
 
         {/* Refer a Friend Button */}
-        {!showComingSoonPopup && (
+        {/* {!showComingSoonPopup && (
           <TouchableOpacity style={styles.referButton}>
             <HeartIcon width={24} height={24} />
             <Text style={styles.referText}>REFER A FRIEND</Text>
           </TouchableOpacity>
-        )}
+        )} */}
 
       </ScrollView>
 
