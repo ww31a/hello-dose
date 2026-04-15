@@ -45,6 +45,7 @@ const LogInjectionScreen = () => {
     mutationFn: ({ dosage, site, injectedAt, notes }) => patientService.logInjection(dosage, site, injectedAt, notes),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patientDashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['injectionHistory'] });
       Alert.alert('Success', 'Injection logged successfully');
       navigation.goBack();
     },

@@ -59,7 +59,7 @@ const HomeScreen = () => {
           <Text style={styles.headerTitle}>Welcome back{dashboard?.patient?.firstName ? `, ${dashboard.patient.firstName}` : ''}</Text>
         </View>
 
-        <View style={styles.toggleRow}>
+        {/* <View style={styles.toggleRow}>
           <TouchableOpacity
             style={styles.toggleButton}
             onPress={() => setShowNotificationBar(prev => !prev)}
@@ -69,14 +69,14 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.toggleButton}
             onPress={() => setShowComingSoonPopup(prev => !prev)}
           >
             <Text style={styles.toggleButtonText}>
               {showComingSoonPopup ? 'Hide coming soon' : 'Show coming soon'}
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
 
         {showNotificationBar && dashboard?.nextAppointment && (
@@ -104,7 +104,7 @@ const HomeScreen = () => {
               <View style={styles.notificationDotInactive} />
             </View>
           </View>
-        )}
+        )} */}
 
         {/* Current Program Card */}
         <TouchableOpacity
@@ -123,7 +123,11 @@ const HomeScreen = () => {
           </View>
 
           <Text style={styles.cardSubtitle}>
-            {dashboard?.healthInsights?.lastLoggedLabel ? `Last Injection: ${dashboard.healthInsights.lastLoggedLabel}` : 'Ready for your first log?'}
+            {dashboard?.healthInsights?.lastInjectionAt 
+              ? (dashboard.healthInsights.daysSinceLastInjection === 0 ? 'Last Injection: Today' 
+                : dashboard.healthInsights.daysSinceLastInjection === 1 ? 'Last Injection: Yesterday' 
+                : `Last Injection: ${dashboard.healthInsights.daysSinceLastInjection} days ago`) 
+              : 'Ready for your first log?'}
           </Text>
 
           <View style={styles.buttonRow}>
@@ -150,13 +154,13 @@ const HomeScreen = () => {
             <BellIcon width={18} height={18} />
           </View>
           <Text style={styles.reminderWait}>
-            {dashboard?.healthInsights?.nextRefillLabel ? 'Your Next Refill is' : 'Your Next Injection is in'}
+            Your Next Injection is in
           </Text>
           <Text style={styles.reminderTitle}>
-            {dashboard?.healthInsights?.nextRefillLabel || '4 days'}
+            {dashboard?.healthInsights?.nextInjectionLabel || '4 days'}
           </Text>
 
-          <View style={styles.reminderList}>
+          <View>
             <ReminderItem
               icon={WalkIcon}
               label="Walk 10k steps a day"

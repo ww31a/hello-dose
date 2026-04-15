@@ -45,11 +45,23 @@ export const patientService = {
     return apiClient.get('/api/v1/appointments/slots', { params: { date, providerId, days } });
   },
 
-  /**
-   * Book an appointment.
-   * POST /api/v1/appointments/book
-   */
   bookAppointment: async (startTime, providerId) => {
     return apiClient.post('/api/v1/appointments/book', { startTime, providerId });
+  },
+
+  /**
+   * Fetch weight log history.
+   * GET /api/v1/patient/weight-history
+   */
+  getWeightHistory: async () => {
+    return apiClient.get('/api/v1/patient/weight-history');
+  },
+
+  /**
+   * Fetch injection log history.
+   * GET /api/v1/patient/injection-history
+   */
+  getInjectionHistory: async () => {
+    return apiClient.get('/api/v1/patient/injection-history');
   },
 };

@@ -14,6 +14,8 @@ import { Colors, Typography } from '../../../theme';
 import Button from '../../../components/Button';
 import { patientService } from '../../../api/services/patient';
 import styles from './styles';
+import dayjs from "dayjs";
+
 
 const WeightTrendScreen = () => {
   const navigation = useNavigation();
@@ -22,6 +24,19 @@ const WeightTrendScreen = () => {
     queryKey: ['patientDashboard'],
     queryFn: patientService.getDashboard,
   });
+
+  const { data: weightData } = useQuery({
+    queryKey: ['weightHistory'],
+    queryFn: patientService.getWeightHistory,
+  });
+
+  const historyList = weightData?.history || [];
+  const formattedNpCheckInDate = weightData?.npCheckInDate
+  ? dayjs(weightData?.npCheckInDate).format('MMM D')
+  : null;
+  const npCheckInDate = formattedNpCheckInDate
+  const currentMonthName = new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase();
+
 
   const healthInsights = dashboardData?.healthInsights || {};
   const currentWeight = healthInsights.lastLoggedWeight ? Number(healthInsights.lastLoggedWeight).toFixed(1) : '--';
@@ -59,7 +74,7 @@ const WeightTrendScreen = () => {
 
         {/* Chart Section */}
         <View style={styles.chartContainer}>
-          <WeightChart />
+          <WeightChart historyList={historyList} />
         </View>
 
         {/* Current Weight Card */}
@@ -99,19 +114,21 @@ const WeightTrendScreen = () => {
 
         <View style={styles.listContainer}>
           <View style={styles.monthTag}>
-            <Text style={styles.monthTagText}>JANUARY</Text>
+            <Text style={styles.monthTagText}>{currentMonthName}</Text>
           </View>
 
-          <EntryItem
-            date="30"
-            weight="144"
-            time="8:45 AM"
-          />
-          <EntryItem
-            date="15"
-            weight="146"
-            time="2:30 PM"
-          />
+          {historyList.length === 0 ? (
+            <Text style={{ textAlign: 'center', marginTop: 20, color: '#94A3B8' }}>No logs this month</Text>
+          ) : (
+            historyList.map(log => (
+              <EntryItem
+                key={log.id || log.date}
+                date={log.day?.toString()}
+                weight={log.weight?.toString()}
+                time={log.time}
+              />
+            ))
+          )}
         </View>
 
       </ScrollView>
@@ -119,23 +136,44 @@ const WeightTrendScreen = () => {
   );
 };
 
-const WeightChart = () => {
+const WeightChart = ({ historyList, npCheckInDate }) => {
   const width = 340;
   const height = 240;
   const padding = 30;
 
-  const data = [188, 175, 160, 138, 128];
-  const labels = ['Dec 1', 'Dec 15', 'Jan 1', 'Jan 15', 'Jan 30'];
-  const gridValues = [120, 140, 160, 180, 200];
+  // Reverse so oldest is on the left
+  const sortedHistory = [...(historyList || [])].reverse();
 
-  const min = 120;
-  const max = 200;
+  if (sortedHistory.length === 0) {
+    return (
+      <View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: '#94A3B8', fontFamily: Typography.fontFamily.medium }}>No chart data available</Text>
+      </View>
+    );
+  }
+
+  // If only 1 data point, duplicate it to draw a flat line
+  if (sortedHistory.length === 1) {
+    sortedHistory.push(sortedHistory[0]);
+  }
+
+  const data = sortedHistory.map(item => Number(item.weight));
+  const labels = sortedHistory.map(item => dayjs(item.date).format('MMM D'));
+
+  const minWeight = Math.min(...data);
+  const maxWeight = Math.max(...data);
+
+  const min = Math.max(0, Math.floor(minWeight - 5));
+  const max = Math.ceil(maxWeight + 5);
+
+  const interval = (max - min) / 4;
+  const gridValues = [min, min + interval, min + interval * 2, min + interval * 3, max].map(Math.round);
 
   const chartHeight = height - padding * 2;
   const chartWidth = width - padding * 2;
 
   const getY = (value) => {
-    return padding + ((max - value) / (max - min)) * chartHeight;
+    return padding + ((max - value) / (max - min || 1)) * chartHeight;
   };
 
   const getX = (index) => {
@@ -149,11 +187,8 @@ const WeightChart = () => {
 
   const path = points.reduce((acc, point, i) => {
     if (i === 0) return `M ${point.x} ${point.y}`;
-
-    // Smooth quadratic ease into each point
     const prev = points[i - 1];
     const cx = (prev.x + point.x) / 2;
-
     return `${acc} Q ${cx} ${prev.y}, ${point.x} ${point.y}`;
   }, '');
 
@@ -177,7 +212,7 @@ const WeightChart = () => {
       {gridValues.map((val, i) => {
         const y = getY(val);
         return (
-          <G key={val}>
+          <G key={`h-${val}-${i}`}>
             <SvgText
               x={padding - 8}
               y={y + 4}
@@ -204,8 +239,7 @@ const WeightChart = () => {
       {/* Vertical Grid Lines */}
       {labels.map((_, i) => {
         const x = getX(i);
-        // Only draw vertical lines for index 1 and 3 (Dec 15 and Jan 15)
-        if (i !== 1 && i !== 3) return null;
+        if (i === 0 || i === labels.length - 1) return null; // Only middle lines
         return (
           <Line key={`v-${i}`} x1={x} y1={padding} x2={x} y2={height - padding} stroke="#F1F5F9" strokeWidth="1" />
         );
@@ -227,26 +261,22 @@ const WeightChart = () => {
       />
 
       {/* Data Points */}
-      {points.map((p, i) => {
-        // Only show circles for index 2 (Jan 1) and 4 (Jan 30)
-        if (i !== 2 && i !== 4) return null;
-        return (
-          <Circle
-            key={i}
-            cx={p.x}
-            cy={p.y}
-            r={i === 4 ? 7 : 6}
-            stroke={i === 2 ? Colors.primary : 'none'}
-            strokeWidth="3"
-            fill={i === 2 ? 'white' : Colors.primary}
-          />
-        );
-      })}
+      {points.map((p, i) => (
+        <Circle
+          key={`p-${i}`}
+          cx={p.x}
+          cy={p.y}
+          r={i === points.length - 1 ? 7 : 5}
+          stroke={i === points.length - 1 ? 'none' : Colors.primary}
+          strokeWidth="2"
+          fill={i === points.length - 1 ? Colors.primary : 'white'}
+        />
+      ))}
 
       {/* X-Axis Labels */}
       {labels.map((label, i) => (
         <SvgText
-          key={label}
+          key={`l-${i}`}
           x={getX(i)}
           y={height - 5}
           fontSize="11"
@@ -262,7 +292,7 @@ const WeightChart = () => {
 };
 
 const EntryItem = ({ date, weight, time, isSpecial }) => (
-  <TouchableOpacity style={styles.entryItem}>
+  <View style={styles.entryItem}>
     <View style={[styles.dateCircle]}>
       <Text style={[styles.dateText]}>{date}</Text>
     </View>
@@ -273,8 +303,7 @@ const EntryItem = ({ date, weight, time, isSpecial }) => (
       </View>
       <Text style={styles.entryTime}>{time}</Text>
     </View>
-    <ChevronRight color="#CBD5E1" size={20} />
-  </TouchableOpacity>
+  </View>
 );
 
 export default WeightTrendScreen;

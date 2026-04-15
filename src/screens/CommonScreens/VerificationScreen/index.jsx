@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,33 @@ const VerificationScreen = () => {
   const [code, setCode] = useState('');
   const [isCodeError, setIsCodeError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(30);
+  const [isResending, setIsResending] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setInterval(() => setCountdown(prev => prev - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  const handleResend = async () => {
+    if (countdown > 0) return;
+    setIsResending(true);
+    try {
+      await authService.requestOtp(email, isNPLogin ? 'provider' : 'patient');
+      setCountdown(30);
+      setCode('');
+      setIsCodeError(false);
+      Alert.alert('Success', 'A new verification code has been sent to your email.');
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Failed to resend code');
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   const isNPLogin = userType === 'np';
   const loginBadgeText = isNPLogin ? 'NP Login' : 'Patient Login';
   const loginRouteName = isNPLogin ? 'NPLogin' : 'Login';
@@ -60,10 +87,6 @@ const VerificationScreen = () => {
     const digitsOnly = value.replace(/\D/g, '').slice(0, 6);
     setCode(digitsOnly);
     if (isCodeError) setIsCodeError(false);
-
-    if (digitsOnly.length === 6) {
-      verifyCode(digitsOnly);
-    }
   };
 
   const handleVerify = () => {
@@ -93,13 +116,10 @@ const VerificationScreen = () => {
           <Text style={styles.subtitle}>
             A 6-digit verification code has been sent to your email
           </Text>
-          <Text style={styles.helperText}>
-            Use `666666` as the correct OTP for successful login.
-          </Text>
 
           <Input
             label="Verification Code"
-            placeholder="e.g. 666666"
+            placeholder="e.g. 123456"
             value={code}
             onChangeText={handleCodeChange}
             keyboardType="number-pad"
@@ -111,7 +131,7 @@ const VerificationScreen = () => {
           />
           {isCodeError && (
             <Text style={styles.errorText}>
-              Invalid code. Please enter `666666`.
+              Invalid code.`.
             </Text>
           )}
 
@@ -134,8 +154,10 @@ const VerificationScreen = () => {
 
           <View style={styles.resendRow}>
             <Text style={styles.mutedText}>Didn't receive the code? </Text>
-            <TouchableOpacity>
-              <Text style={styles.linkText}>Resend in 0:30</Text>
+            <TouchableOpacity onPress={handleResend} disabled={countdown > 0 || isResending}>
+              <Text style={[styles.linkText, (countdown > 0 || isResending) && { color: '#9CA3AF' }]}>
+                {isResending ? 'Resending...' : countdown > 0 ? `Resend in 0:${countdown.toString().padStart(2, '0')}` : 'Resend Code'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   infoSubValue: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: Typography.fontFamily.regular,
     color: '#64748B',
   },

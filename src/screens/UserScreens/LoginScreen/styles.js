@@ -39,13 +39,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 10,
   },
-  helperText: {
-    marginTop: 10,
-    fontSize: 12,
-    lineHeight: 18,
-    color: '#6B7280',
-    fontFamily: Typography.fontFamily.medium,
-  },
   footer: {
     position: 'absolute',
     bottom: 20,

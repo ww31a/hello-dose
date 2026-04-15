@@ -43,13 +43,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 8,
   },
-  helperText: {
-    fontSize: 12,
-    fontFamily: Typography.fontFamily.medium,
-    color: '#6B7280',
-    lineHeight: 18,
-    marginBottom: 20,
-  },
   inputContainer: {
     color: '#9CA3AF',
     marginTop: 10,

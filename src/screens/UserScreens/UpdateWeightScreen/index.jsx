@@ -35,6 +35,7 @@ const UpdateWeightScreen = () => {
     mutationFn: ({ weight, unit }) => patientService.logWeight(weight, unit),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patientDashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['weightHistory'] });
       Alert.alert('Success', 'Weight updated successfully');
       navigation.goBack();
     },

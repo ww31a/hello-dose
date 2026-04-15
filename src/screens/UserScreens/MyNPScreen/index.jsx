@@ -92,7 +92,7 @@ const MyNPScreen = () => {
 
         {/* Info Cards */}
         <View style={styles.cardsContainer}>
-          <View style={styles.stateToggleRow}>
+          {/* <View style={styles.stateToggleRow}>
             <TouchableOpacity
               style={[styles.stateToggleBtn, !isScheduled && styles.stateToggleBtnActive]}
               onPress={() => setIsScheduled(false)}
@@ -109,7 +109,7 @@ const MyNPScreen = () => {
                 Scheduled
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Next Check-in Card */}
           <View style={[styles.infoCard, styles.nextCheckinCard]}>

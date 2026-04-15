@@ -175,10 +175,6 @@ const styles = StyleSheet.create({
     color: Colors.dark,
     marginBottom: 20,
   },
-  reminderList: {
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
-  },
   reminderItem: {
     flexDirection: 'row',
     alignItems: 'center',

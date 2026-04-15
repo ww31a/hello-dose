@@ -34,8 +34,14 @@ export const authService = {
 
   /**
    * Logout and clear local storage.
+   * POST /api/v1/auth/logout
    */
   logout: async () => {
+    try {
+      await apiClient.post('/api/v1/auth/logout');
+    } catch (e) {
+      console.warn("Backend logout failed, proceeding with local clearing.", e);
+    }
     await AsyncStorage.removeItem('accessToken');
     await AsyncStorage.removeItem('userRole');
   },

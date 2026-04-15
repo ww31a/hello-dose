@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Svg, { Circle, G } from 'react-native-svg';
+import dayjs from 'dayjs';
 import { Colors } from '../../../theme';
 import { patientService } from '../../../api/services/patient';
 // SVG Icons from assets/icons
@@ -76,14 +77,20 @@ const MyProgramScreen = () => {
             icon={DrugIcon}
             label="DOSAGE"
             value={health?.currentDosage || '0mg'}
-            subValue={health?.lastLoggedLabel ? `Last Injection: ${health.lastLoggedLabel}` : 'No injections logged'}
+            subValue={
+              health?.lastInjectionAt 
+                ? (health.daysSinceLastInjection === 0 ? 'Last Injection: Today' 
+                  : health.daysSinceLastInjection === 1 ? 'Last Injection: Yesterday' 
+                  : `Last Injection: ${health.daysSinceLastInjection} days ago`) 
+                : 'No injections logged'
+            }
             onPress={() => navigation.navigate('InjectionLogs')}
           />
           <InfoCard
             icon={CalendarIcon}
             label="NEXT REFILL"
-            value={health?.nextRefillLabel || 'Pending'}
-            subValue="Refill eligibility"
+            value={health?.nextRefillDate ? dayjs(health.nextRefillDate).format('MMM D') : 'Pending'}
+            subValue={health?.nextRefillLabel || 'Refill eligibility'}
           />
         </View>
 

@@ -10,12 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import ActivePatientIcon from '../../../assets/icons/active-patient.svg';
 import GreenTimeIcon from '../../../assets/icons/gree-time.svg';
+import { authService } from '../../../api/services/auth';
 
 import styles from './styles';
 
 const NPProfileScreen = () => {
   const navigation = useNavigation();
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authService.logout();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

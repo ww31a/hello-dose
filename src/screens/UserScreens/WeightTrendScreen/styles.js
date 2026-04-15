@@ -89,12 +89,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: Typography.fontFamily.bold,
     color: '#94A3B8',
+    marginTop:15
   },
   badge: {
     backgroundColor: '#F0FDFA',
     paddingHorizontal: 10,
     paddingVertical: 2,
     borderRadius: 12,
+    marginTop:15
   },
   badgeText: {
     fontSize: 12,

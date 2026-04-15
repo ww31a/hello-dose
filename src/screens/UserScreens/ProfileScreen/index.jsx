@@ -10,12 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { ChevronRight } from 'lucide-react-native';
 import FirstAidIcon from '../../../assets/icons/nurse-hat.svg';
+import { authService } from '../../../api/services/auth';
 
 import styles from './styles';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authService.logout();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

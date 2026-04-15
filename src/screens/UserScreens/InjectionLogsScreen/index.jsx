@@ -9,32 +9,33 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
+import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { patientService } from '../../../api/services/patient';
 import styles from './styles';
-
-const injectionHistory = [
-  {
-    id: 'feb-12',
-    day: '12',
-    dateLabel: 'Feb 12',
-    timeLabel: '8:45 AM',
-    dosage: '2mg',
-    site: 'L Abdomen',
-  },
-  {
-    id: 'feb-7',
-    day: '7',
-    dateLabel: 'Feb 7',
-    timeLabel: '2:30 PM',
-    dosage: '2.5mg',
-    site: 'R Abdomen',
-  },
-];
 
 const InjectionLogsScreen = () => {
   const navigation = useNavigation();
-  const completedInjections = 2;
-  const totalInjections = 4;
-  const progressWidth = `${(completedInjections / totalInjections) * 100}%`;
+
+  const { data: logData } = useQuery({
+    queryKey: ['injectionHistory'],
+    queryFn: patientService.getInjectionHistory,
+  });
+
+  const injectionHistory = logData?.history || [];
+  const monthlyProgress = logData?.monthlyProgress || { count: 0, total: 4, percentage: 0 };
+  const progressWidth = `${monthlyProgress.percentage}%`;
+  
+  const currentMonthName = new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase();
+  const lastInjectionAge = injectionHistory.length > 0
+    ? dayjs().diff(dayjs(injectionHistory[0].injectedAt), 'day')
+    : null;
+    
+  const lastInjectionCaption = lastInjectionAge === null 
+    ? 'No injections logged' 
+    : lastInjectionAge === 0 ? 'Last Injection: Today' 
+    : lastInjectionAge === 1 ? 'Last Injection: Yesterday' 
+    : `Last Injection: ${lastInjectionAge} days ago`;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -56,8 +57,8 @@ const InjectionLogsScreen = () => {
       >
         <View style={styles.summaryCard}>
           <Text style={styles.sectionEyebrow}>MONTHLY PROGRESS</Text>
-          <Text style={styles.summaryValue}>2 of 4 Injections</Text>
-          <Text style={styles.summaryCaption}>Last Injection: 3 days ago</Text>
+          <Text style={styles.summaryValue}>{monthlyProgress.count} of {monthlyProgress.total} Injections</Text>
+          <Text style={styles.summaryCaption}>{lastInjectionCaption}</Text>
 
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: progressWidth }]} />
@@ -72,29 +73,33 @@ const InjectionLogsScreen = () => {
         </View>
 
         <View style={styles.monthPill}>
-          <Text style={styles.monthPillText}>FEBRUARY</Text>
+          <Text style={styles.monthPillText}>{currentMonthName}</Text>
         </View>
 
         <View style={styles.logList}>
-          {injectionHistory.map((item) => (
-            <View key={item.id} style={styles.logCard}>
-              <View style={styles.logDayBadge}>
-                <Text style={styles.logDayText}>{item.day}</Text>
-              </View>
-
-              <View style={styles.logMeta}>
-                <Text style={styles.logDate}>{item.dateLabel}</Text>
-                <Text style={styles.logTime}>{item.timeLabel}</Text>
-              </View>
-
-              <View style={styles.logInfo}>
-                <View style={styles.dosagePill}>
-                  <Text style={styles.dosageText}>{item.dosage}</Text>
+          {injectionHistory.length === 0 ? (
+            <Text style={{ textAlign: 'center', marginTop: 20, color: '#94A3B8' }}>No injections logged</Text>
+          ) : (
+            injectionHistory.map((item) => (
+              <View key={item._id} style={styles.logCard}>
+                <View style={styles.logDayBadge}>
+                  <Text style={styles.logDayText}>{dayjs(item.injectedAt).format('D')}</Text>
                 </View>
-                <Text style={styles.siteText}>{item.site}</Text>
+
+                <View style={styles.logMeta}>
+                  <Text style={styles.logDate}>{dayjs(item.injectedAt).format('MMM D')}</Text>
+                  <Text style={styles.logTime}>{dayjs(item.injectedAt).format('h:mm A')}</Text>
+                </View>
+
+                <View style={styles.logInfo}>
+                  <View style={styles.dosagePill}>
+                    <Text style={styles.dosageText}>{item.dosage}</Text>
+                  </View>
+                  <Text style={styles.siteText}>{item.site}</Text>
+                </View>
               </View>
-            </View>
-          ))}
+            ))
+          )}
         </View>
 
         <View style={styles.buttonSection}>
