@@ -5,12 +5,15 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
+import { patientService } from '../../../api/services/patient';
 
 // SVG Icons from assets/icons
 import CalendarIcon from '../../../assets/icons/calender-2.svg';
@@ -18,22 +21,50 @@ import TimeIcon from '../../../assets/icons/time.svg';
 
 import styles from './styles';
 
+const SITE_MAPPING = {
+  'L Abdomen': 'L_ABDOMEN',
+  'R Abdomen': 'R_ABDOMEN',
+  'L Thigh': 'L_THIGH',
+  'R Thigh': 'R_THIGH',
+};
+
 const LogInjectionScreen = () => {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
+
+  const { data: dashboard } = useQuery({
+    queryKey: ['patientDashboard'],
+    queryFn: patientService.getDashboard,
+    staleTime: Infinity,
+  });
+
   const [selectedSite, setSelectedSite] = useState('R Abdomen');
-  const [dateType, setDateType] = useState('Today');
-  const [timeType, setTimeType] = useState('Now');
   const [notes, setNotes] = useState('');
+
+  const logInjectionMutation = useMutation({
+    mutationFn: ({ dosage, site, injectedAt, notes }) => patientService.logInjection(dosage, site, injectedAt, notes),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patientDashboard'] });
+      Alert.alert('Success', 'Injection logged successfully');
+      navigation.goBack();
+    },
+    onError: (error) => {
+      Alert.alert('Error', error.message || 'Failed to log injection');
+    },
+  });
+
+  const handleLog = () => {
+    const site = SITE_MAPPING[selectedSite] || 'L_ABDOMEN';
+    const dosage = dashboard?.healthInsights?.currentDosage || '5.0';
+    const injectedAt = new Date().toISOString();
+    
+    logInjectionMutation.mutate({ dosage, site, injectedAt, notes });
+  };
 
   const injectionSites = [
     'L Abdomen', 'R Abdomen',
     'L Thigh', 'R Thigh'
   ];
-
-  const handleLog = () => {
-    // Navigate back or to success screen
-    navigation.goBack();
-  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -83,7 +114,9 @@ const LogInjectionScreen = () => {
             <View style={styles.dateTimeField}>
               <Text style={styles.fieldLabel}>DATE</Text>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>02/12/2025</Text>
+                <Text style={styles.inputText}>
+                  {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+                </Text>
                 <CalendarIcon width={20} height={20} />
               </View>
             </View>
@@ -91,7 +124,9 @@ const LogInjectionScreen = () => {
             <View style={styles.dateTimeField}>
               <Text style={styles.fieldLabel}>TIME</Text>
               <View style={styles.inputWrapper}>
-                <Text style={styles.inputText}>09:00 AM</Text>
+                <Text style={styles.inputText}>
+                  {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </Text>
                 <TimeIcon width={40} height={40} />
               </View>
             </View>
@@ -123,6 +158,8 @@ const LogInjectionScreen = () => {
             label="Log and Update"
             variant="primary"
             onPress={handleLog}
+            isLoading={logInjectionMutation.isPending}
+            disabled={logInjectionMutation.isPending}
             style={styles.logButton}
           />
 

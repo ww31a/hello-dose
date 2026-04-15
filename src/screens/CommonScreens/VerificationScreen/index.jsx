@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useRoute, useNavigation } from '@react-navigation/native';
@@ -11,6 +12,7 @@ import { Colors } from '../../../theme';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Lock from '../../../assets/icons/Login.svg';
+import { authService } from '../../../api/services/auth';
 import styles from './styles';
 
 const VerificationScreen = () => {
@@ -19,23 +21,38 @@ const VerificationScreen = () => {
   const { email, userType } = route.params;
   const [code, setCode] = useState('');
   const [isCodeError, setIsCodeError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isNPLogin = userType === 'np';
   const loginBadgeText = isNPLogin ? 'NP Login' : 'Patient Login';
   const loginRouteName = isNPLogin ? 'NPLogin' : 'Login';
   const appRouteName = isNPLogin ? 'NPTabs' : 'AppTabs';
 
-  const verifyCode = (value) => {
+  const verifyCode = async (value) => {
     if (value.length !== 6) return;
-    if (value === '666666') {
+    
+    setIsLoading(true);
+    try {
+      const response = await authService.verifyOtp(email, value);
       setIsCodeError(false);
+      
+      // Determine destination based on role if returned, or fallback to appRouteName
+      const destination = response.role === 'provider' ? 'NPTabs' : 'AppTabs';
+      
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: appRouteName }],
+          routes: [{ name: destination }],
         })
       );
-    } else {
+    } catch (error) {
+      console.error('Verification error:', error);
       setIsCodeError(true);
+      Alert.alert(
+        'Verification Failed',
+        error.message || 'Invalid code. Please try again.'
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -110,8 +127,9 @@ const VerificationScreen = () => {
           <Button
             label="Login"
             onPress={handleVerify}
-            disabled={code.length < 6}
-            variant={code.length < 6 ? 'disabled' : 'primary'}
+            disabled={code.length < 6 || isLoading}
+            isLoading={isLoading}
+            variant={code.length < 6 || isLoading ? 'disabled' : 'primary'}
           />
 
           <View style={styles.resendRow}>

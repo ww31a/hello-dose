@@ -5,20 +5,52 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, Minus, Plus } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
+import { patientService } from '../../../api/services/patient';
 
 import styles from './styles';
 
 const UpdateWeightScreen = () => {
   const navigation = useNavigation();
-  const [wholeNumber, setWholeNumber] = useState('140');
-  const [decimalPart, setDecimalPart] = useState('6');
-  const [unit, setUnit] = useState('lbs');
+  const route = useRoute();
+  const queryClient = useQueryClient();
+
+  const weightObj = route.params?.currentWeight ? Number(route.params.currentWeight) : 140;
+  const initialWhole = Math.floor(weightObj).toString();
+  const initialDecimal = Math.round((weightObj - Math.floor(weightObj)) * 10).toString();
+
+  const [wholeNumber, setWholeNumber] = useState(initialWhole);
+  const [decimalPart, setDecimalPart] = useState(initialDecimal);
+  const [unit, setUnit] = useState(route.params?.currentUnit || 'lbs');
+
+
+  const logWeightMutation = useMutation({
+    mutationFn: ({ weight, unit }) => patientService.logWeight(weight, unit),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patientDashboard'] });
+      Alert.alert('Success', 'Weight updated successfully');
+      navigation.goBack();
+    },
+    onError: (error) => {
+      Alert.alert('Error', error.message || 'Failed to update weight');
+    },
+  });
+
+  const handleSave = () => {
+    const weight = parseFloat(`${wholeNumber}.${decimalPart}`);
+    if (isNaN(weight)) {
+      Alert.alert('Error', 'Please enter a valid weight');
+      return;
+    }
+    logWeightMutation.mutate({ weight, unit });
+  };
 
   // Format today's date
   const today = new Date();
@@ -158,7 +190,9 @@ const UpdateWeightScreen = () => {
           </Text>
           <Button
             label="Save and Update"
-            onPress={() => navigation.goBack()}
+            onPress={handleSave}
+            isLoading={logWeightMutation.isPending}
+            disabled={logWeightMutation.isPending}
             style={styles.saveButton}
           />
         </View>

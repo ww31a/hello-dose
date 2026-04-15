@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   calendarCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 32,
+    borderRadius: 38,
     padding: 24,
     width: '100%',
     shadowColor: '#000',
@@ -137,21 +137,59 @@ const styles = StyleSheet.create({
   controlsRow: {
     flexDirection: 'row',
     gap: 12,
+    marginTop: 10,
   },
   dropdown: {
     flex: 1,
-    height: 48,
+    height: 54,
     backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
   },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  modalContent: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    padding: 24,
+    maxHeight: '60%',
+  },
+  modalHeader: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+  },
+  optionsList: {
+    width: '100%',
+  },
+  optionItem: {
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  optionLabel: {
+    fontSize: 18,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+    textAlign: 'center',
   },
 });
 

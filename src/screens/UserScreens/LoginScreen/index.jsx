@@ -3,6 +3,8 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -10,21 +12,29 @@ import { ChevronLeft, Mail } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
+import { authService } from '../../../api/services/auth';
 import styles from './styles';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email) return;
 
-    // Simulating an authorization check
-    // For demo: test@example.com goes to Verification, others go to Error
-    if (email.toLowerCase() === 'test@example.com') {
+    setIsLoading(true);
+    try {
+      await authService.requestOtp(email);
       navigation.navigate('Verification', { email });
-    } else {
-      navigation.navigate('LoginError', { email });
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert(
+        'Login Failed',
+        error.message || 'Could not send OTP. Please check your connection or email.'
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,8 +77,9 @@ const LoginScreen = () => {
           <Button
             label="Login"
             onPress={handleLogin}
-            disabled={!email}
-            variant={!email ? 'disabled' : 'primary'}
+            disabled={!email || isLoading}
+            isLoading={isLoading}
+            variant={!email || isLoading ? 'disabled' : 'primary'}
           />
         </View>
       </View>

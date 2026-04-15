@@ -5,14 +5,17 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
 import {
   ChevronRight,
 } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
+import { patientService } from '../../../api/services/patient';
 
 // SVG Icons from assets/icons
 import BellIcon from '../../../assets/icons/bell-icon.svg';
@@ -29,8 +32,20 @@ import styles from './styles';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [showNotificationBar, setShowNotificationBar] = useState(false);
-  const [showComingSoonPopup, setShowComingSoonPopup] = useState(false);
+  const [showNotificationBar, setShowNotificationBar] = useState(true);
+  
+  const { data: dashboard, isLoading, error } = useQuery({
+    queryKey: ['patientDashboard'],
+    queryFn: patientService.getDashboard,
+  });
+
+  if (isLoading) {
+    return (
+      <View style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -41,7 +56,7 @@ const HomeScreen = () => {
       >
         {/* Header Section */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Welcome back, Natalia</Text>
+          <Text style={styles.headerTitle}>Welcome back{dashboard?.patient?.firstName ? `, ${dashboard.patient.firstName}` : ''}</Text>
         </View>
 
         <View style={styles.toggleRow}>
@@ -64,16 +79,16 @@ const HomeScreen = () => {
           </TouchableOpacity> */}
         </View>
 
-        {showNotificationBar && (
+        {showNotificationBar && dashboard?.nextAppointment && (
           <View style={styles.notificationBar}>
             <View style={styles.notificationIconWrap}>
               <CalenderIcon width={30} height={30} />
             </View>
-
+            
             <View style={styles.notificationTextWrap}>
               <Text style={styles.notificationTitle}>Upcoming appointment</Text>
               <Text style={styles.notificationSubtitle}>
-                Your call with NP Bracha is in 1d 12hr
+                {dashboard.nextAppointment.label}
               </Text>
             </View>
 
@@ -101,11 +116,15 @@ const HomeScreen = () => {
           </View>
 
           <View style={styles.programRow}>
-            <Text style={styles.programTitle}>DROP Tirzepatide</Text>
+            <Text style={styles.programTitle}>
+              {dashboard?.program?.name || 'DROP Tirzepatide'} ({dashboard?.currentDosage || '0mg'})
+            </Text>
             <ChevronRight color={Colors.dark} size={24} />
           </View>
 
-          <Text style={styles.cardSubtitle}>Last Injection: 3 days ago</Text>
+          <Text style={styles.cardSubtitle}>
+            {dashboard?.healthInsights?.lastLoggedLabel ? `Last Injection: ${dashboard.healthInsights.lastLoggedLabel}` : 'Ready for your first log?'}
+          </Text>
 
           <View style={styles.buttonRow}>
             <Button
@@ -130,8 +149,12 @@ const HomeScreen = () => {
             <Text style={styles.cardLabel}>DAILY REMINDERS</Text>
             <BellIcon width={18} height={18} />
           </View>
-          <Text style={styles.reminderWait}>Your Next Injection is in</Text>
-          <Text style={styles.reminderTitle}>4 days</Text>
+          <Text style={styles.reminderWait}>
+            {dashboard?.healthInsights?.nextRefillLabel ? 'Your Next Refill is' : 'Your Next Injection is in'}
+          </Text>
+          <Text style={styles.reminderTitle}>
+            {dashboard?.healthInsights?.nextRefillLabel || '4 days'}
+          </Text>
 
           <View style={styles.reminderList}>
             <ReminderItem

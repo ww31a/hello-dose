@@ -9,12 +9,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Svg, { Circle, Path, Text as SvgText, G, Line, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { useQuery } from '@tanstack/react-query';
 import { Colors, Typography } from '../../../theme';
 import Button from '../../../components/Button';
+import { patientService } from '../../../api/services/patient';
 import styles from './styles';
 
 const WeightTrendScreen = () => {
   const navigation = useNavigation();
+
+  const { data: dashboardData } = useQuery({
+    queryKey: ['patientDashboard'],
+    queryFn: patientService.getDashboard,
+  });
+
+  const healthInsights = dashboardData?.healthInsights || {};
+  const currentWeight = healthInsights.lastLoggedWeight ? Number(healthInsights.lastLoggedWeight).toFixed(1) : '--';
+  const currentUnit = healthInsights.lastLoggedUnit || 'lbs';
+  const weightChange = healthInsights.totalLossPercent || 0;
+  const isLoss = weightChange > 0;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -54,16 +67,23 @@ const WeightTrendScreen = () => {
           <View style={styles.summaryContent}>
             <Text style={styles.summaryLabel}>CURRENT WEIGHT</Text>
             <View style={styles.weightRow}>
-              <Text style={styles.summaryWeight}>140.0</Text>
-              <Text style={styles.summaryUnit}>lbs</Text>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>▼ 2.1%</Text>
-              </View>
+              <Text style={styles.summaryWeight}>{currentWeight}</Text>
+              <Text style={styles.summaryUnit}>{currentUnit}</Text>
+              {currentWeight !== '--' && (
+                <View style={[styles.badge, !isLoss && { backgroundColor: '#FEE2E2' }]}>
+                  <Text style={[styles.badgeText, !isLoss && { color: '#EF4444' }]}>
+                    {isLoss ? '▼' : '▲'} {Math.abs(weightChange)}%
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
           <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => navigation.navigate('UpdateWeight')}
+            onPress={() => navigation.navigate('UpdateWeight', { 
+              currentWeight: healthInsights.lastLoggedWeight, 
+              currentUnit 
+            })}
           >
             <Text style={styles.updateButtonText}>Update</Text>
           </TouchableOpacity>

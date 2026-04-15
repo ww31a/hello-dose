@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { Colors } from '../../../theme';
+import { patientService } from '../../../api/services/patient';
 // SVG Icons from assets/icons
 import DrugIcon from '../../../assets/icons/drug.svg';
 import CalendarIcon from '../../../assets/icons/calender-3.svg';
@@ -20,6 +22,23 @@ import styles from './styles';
 
 const MyProgramScreen = () => {
   const navigation = useNavigation();
+
+  const { data: dashboard, isLoading } = useQuery({
+    queryKey: ['patientDashboard'],
+    queryFn: patientService.getDashboard,
+  });
+
+  if (isLoading) {
+    return (
+      <View style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text>Loading Program...</Text>
+      </View>
+    );
+  }
+
+  const program = dashboard?.program;
+  const health = dashboard?.healthInsights;
+  const progress = program?.progressPercent ? program.progressPercent / 100 : 0.5;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -39,14 +58,16 @@ const MyProgramScreen = () => {
         {/* Goal Progress Card */}
         <View style={styles.mainCard}>
           <View style={styles.gaugeContainer}>
-            <CircularProgress size={160} strokeWidth={15} progress={0.5} />
+            <CircularProgress size={160} strokeWidth={15} progress={progress} />
             <View style={styles.gaugeTextContainer}>
-              <Text style={styles.gaugeValue}>50%</Text>
+              <Text style={styles.gaugeValue}>{Math.round(progress * 100)}%</Text>
               <Text style={styles.gaugeLabel}>GOAL PROGRESS</Text>
             </View>
           </View>
-          <Text style={styles.programTitle}>DROP Tirzepatide</Text>
-          <Text style={styles.programSubtitle}>20 of 40 Pounds Lost</Text>
+          <Text style={styles.programTitle}>{program?.name || 'DROP Tirzepatide'}</Text>
+          <Text style={styles.programSubtitle}>
+            {program?.currentWeightLoss || 0} of {program?.targetWeightLoss || 0} Pounds Lost
+          </Text>
         </View>
 
         {/* Info Cards Row */}
@@ -54,15 +75,15 @@ const MyProgramScreen = () => {
           <InfoCard
             icon={DrugIcon}
             label="DOSAGE"
-            value="2mg"
-            subValue="Last Injection: 1 day ago"
+            value={health?.currentDosage || '0mg'}
+            subValue={health?.lastLoggedLabel ? `Last Injection: ${health.lastLoggedLabel}` : 'No injections logged'}
             onPress={() => navigation.navigate('InjectionLogs')}
           />
           <InfoCard
             icon={CalendarIcon}
             label="NEXT REFILL"
-            value="Feb 10"
-            subValue="In 3 weeks"
+            value={health?.nextRefillLabel || 'Pending'}
+            subValue="Refill eligibility"
           />
         </View>
 
@@ -74,8 +95,8 @@ const MyProgramScreen = () => {
           >
             <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
             <View style={styles.weightRow}>
-              <Text style={styles.weightValue}>140.0</Text>
-              <Text style={styles.weightUnit}>lbs</Text>
+              <Text style={styles.weightValue}>{health?.lastLoggedWeight || '000.0'}</Text>
+              <Text style={styles.weightUnit}>{health?.lastLoggedUnit || 'lbs'}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
