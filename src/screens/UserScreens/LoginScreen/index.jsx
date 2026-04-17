@@ -29,10 +29,15 @@ const LoginScreen = () => {
       navigation.navigate('Verification', { email });
     } catch (error) {
       console.error('Login error:', error);
-      Alert.alert(
-        'Login Failed',
-        error.message || 'Could not send OTP. Please check your connection or email.'
-      );
+
+      if (error.status === 404) {
+        navigation.navigate('LoginError', { email });
+      } else {
+        Alert.alert(
+          'Login Failed',
+          error.message || 'Could not send OTP. Please check your connection.',
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -54,9 +59,7 @@ const LoginScreen = () => {
             Welcome back! <Text style={styles.patientBadge}>Patient Login</Text>
           </Text>
 
-          <Text style={styles.heading}>
-            Let's get you{'\n'}logged in
-          </Text>
+          <Text style={styles.heading}>Let's get you{'\n'}logged in</Text>
 
           <Input
             label="Email"

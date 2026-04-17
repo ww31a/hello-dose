@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CommonActions, useRoute, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useRoute,
+  useNavigation,
+} from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Input from '../../../components/Input';
@@ -24,6 +23,7 @@ const VerificationScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(30);
   const [isResending, setIsResending] = useState(false);
+  const isNPLogin = userType === 'np';
 
   useEffect(() => {
     let timer;
@@ -41,7 +41,10 @@ const VerificationScreen = () => {
       setCountdown(30);
       setCode('');
       setIsCodeError(false);
-      Alert.alert('Success', 'A new verification code has been sent to your email.');
+      Alert.alert(
+        'Success',
+        'A new verification code has been sent to your email.',
+      );
     } catch (error) {
       Alert.alert('Error', error.message || 'Failed to resend code');
     } finally {
@@ -49,41 +52,40 @@ const VerificationScreen = () => {
     }
   };
 
-  const isNPLogin = userType === 'np';
   const loginBadgeText = isNPLogin ? 'NP Login' : 'Patient Login';
   const loginRouteName = isNPLogin ? 'NPLogin' : 'Login';
   const appRouteName = isNPLogin ? 'NPTabs' : 'AppTabs';
 
-  const verifyCode = async (value) => {
+  const verifyCode = async value => {
     if (value.length !== 6) return;
-    
+
     setIsLoading(true);
     try {
       const response = await authService.verifyOtp(email, value);
       setIsCodeError(false);
-      
+
       // Determine destination based on role if returned, or fallback to appRouteName
-      const destination = response.role === 'provider' ? 'NPTabs' : 'AppTabs';
-      
+      const destination = userType === 'np' ? 'NPTabs' : 'AppTabs';
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: destination }],
-        })
+        }),
       );
     } catch (error) {
       console.error('Verification error:', error);
       setIsCodeError(true);
       Alert.alert(
         'Verification Failed',
-        error.message || 'Invalid code. Please try again.'
+        error.message || 'Invalid code. Please try again.',
       );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCodeChange = (value) => {
+  const handleCodeChange = value => {
     const digitsOnly = value.replace(/\D/g, '').slice(0, 6);
     setCode(digitsOnly);
     if (isCodeError) setIsCodeError(false);
@@ -106,12 +108,11 @@ const VerificationScreen = () => {
 
         <View style={styles.content}>
           <Text style={styles.welcomeText}>
-            Welcome back! <Text style={styles.patientBadge}>{loginBadgeText}</Text>
+            Welcome back!{' '}
+            <Text style={styles.patientBadge}>{loginBadgeText}</Text>
           </Text>
 
-          <Text style={styles.heading}>
-            Enter Verification Code
-          </Text>
+          <Text style={styles.heading}>Enter Verification Code</Text>
 
           <Text style={styles.subtitle}>
             A 6-digit verification code has been sent to your email
@@ -129,15 +130,12 @@ const VerificationScreen = () => {
             icon={Lock}
             containerStyle={styles.inputContainer}
           />
-          {isCodeError && (
-            <Text style={styles.errorText}>
-              Invalid code.`.
-            </Text>
-          )}
-
+          {isCodeError && <Text style={styles.errorText}>Invalid code.</Text>}
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate(loginRouteName)}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(loginRouteName)}
+            >
               <Text style={styles.changeEmailLink}>Change Email</Text>
             </TouchableOpacity>
           </View>
@@ -154,9 +152,21 @@ const VerificationScreen = () => {
 
           <View style={styles.resendRow}>
             <Text style={styles.mutedText}>Didn't receive the code? </Text>
-            <TouchableOpacity onPress={handleResend} disabled={countdown > 0 || isResending}>
-              <Text style={[styles.linkText, (countdown > 0 || isResending) && { color: '#9CA3AF' }]}>
-                {isResending ? 'Resending...' : countdown > 0 ? `Resend in 0:${countdown.toString().padStart(2, '0')}` : 'Resend Code'}
+            <TouchableOpacity
+              onPress={handleResend}
+              disabled={countdown > 0 || isResending}
+            >
+              <Text
+                style={[
+                  styles.linkText,
+                  (countdown > 0 || isResending) && { color: '#9CA3AF' },
+                ]}
+              >
+                {isResending
+                  ? 'Resending...'
+                  : countdown > 0
+                  ? `Resend in 0:${countdown.toString().padStart(2, '0')}`
+                  : 'Resend Code'}
               </Text>
             </TouchableOpacity>
           </View>

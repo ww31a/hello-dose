@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     backgroundColor: '#E5E7EB',
     justifyContent: 'center',
     alignItems: 'center',
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
+    overflow: 'hidden',
   },
   name: {
     fontSize: 24,

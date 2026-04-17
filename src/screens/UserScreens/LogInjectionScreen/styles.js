@@ -120,9 +120,24 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   inputText: {
+    flex: 1,
     fontSize: 15,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
+    paddingVertical: 0,
+  },
+  iconButton: {
+    marginLeft: 8,
+    padding: 4,
+  },
+  inlinePickerContainer: {
+    marginTop: 8,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#F8FAFC',
+  },
+  iosInlinePicker: {
+    width: '100%',
   },
   toggleRow: {
     flexDirection: 'row',

@@ -10,9 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ChevronRight,
-} from 'lucide-react-native';
+import { ChevronRight } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
 import { patientService } from '../../../api/services/patient';
@@ -33,15 +31,24 @@ import styles from './styles';
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [showNotificationBar, setShowNotificationBar] = useState(true);
-  
-  const { data: dashboard, isLoading, error } = useQuery({
+
+  const {
+    data: dashboard,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['patientDashboard'],
     queryFn: patientService.getDashboard,
   });
 
   if (isLoading) {
     return (
-      <View style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View
+        style={[
+          styles.safeArea,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
@@ -56,7 +63,12 @@ const HomeScreen = () => {
       >
         {/* Header Section */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Welcome back{dashboard?.patient?.firstName ? `, ${dashboard.patient.firstName}` : ''}</Text>
+          <Text style={styles.headerTitle}>
+            Welcome back
+            {dashboard?.patient?.firstName
+              ? `, ${dashboard.patient.firstName}`
+              : ''}
+          </Text>
         </View>
 
         {/* <View style={styles.toggleRow}>
@@ -117,16 +129,19 @@ const HomeScreen = () => {
 
           <View style={styles.programRow}>
             <Text style={styles.programTitle}>
-              {dashboard?.program?.name || 'DROP Tirzepatide'} ({dashboard?.currentDosage || '0mg'})
+              {dashboard?.program?.name || 'DROP Tirzepatide'} (
+              {dashboard?.healthInsights?.currentDosage || '0mg'})
             </Text>
             <ChevronRight color={Colors.dark} size={24} />
           </View>
 
           <Text style={styles.cardSubtitle}>
-            {dashboard?.healthInsights?.lastInjectionAt 
-              ? (dashboard.healthInsights.daysSinceLastInjection === 0 ? 'Last Injection: Today' 
-                : dashboard.healthInsights.daysSinceLastInjection === 1 ? 'Last Injection: Yesterday' 
-                : `Last Injection: ${dashboard.healthInsights.daysSinceLastInjection} days ago`) 
+            {dashboard?.healthInsights?.lastInjectionAt
+              ? dashboard.healthInsights.daysSinceLastInjection === 0
+                ? 'Last Injection: Today'
+                : dashboard.healthInsights.daysSinceLastInjection === 1
+                ? 'Last Injection: Yesterday'
+                : `Last Injection: ${dashboard.healthInsights.daysSinceLastInjection} days ago`
               : 'Ready for your first log?'}
           </Text>
 
@@ -141,7 +156,7 @@ const HomeScreen = () => {
             <Button
               label="Reorder"
               variant="secondary"
-              onPress={() => { }}
+              onPress={() => {}}
               style={styles.cardButton}
             />
           </View>
@@ -153,26 +168,19 @@ const HomeScreen = () => {
             <Text style={styles.cardLabel}>DAILY REMINDERS</Text>
             <BellIcon width={18} height={18} />
           </View>
-          <Text style={styles.reminderWait}>
-            Your Next Injection is in
-          </Text>
+          <Text style={styles.reminderWait}>Your Next Injection is in</Text>
           <Text style={styles.reminderTitle}>
             {dashboard?.healthInsights?.nextInjectionLabel || '4 days'}
           </Text>
 
           <View>
-            <ReminderItem
-              icon={WalkIcon}
-              label="Walk 10k steps a day"
-            />
-            <ReminderItem
-              icon={ForkKnifeIcon}
-              label="Protein is essential"
-            />
+            <ReminderItem icon={WalkIcon} label="Walk 10k steps a day" />
+            <ReminderItem icon={ForkKnifeIcon} label="Protein is essential" />
             <ReminderItem
               icon={DropletIcon}
               label="Stay Hydrated"
               action="Book a drip?"
+              line="false"
             />
           </View>
         </View>
@@ -199,14 +207,15 @@ const HomeScreen = () => {
           </View>
         )} */}
 
-
         {/* Coming Up Section */}
         <View style={styles.sectionHeader} />
         <View style={styles.comingUpCard}>
           <View style={styles.comingUpHeader}>
             <View>
               <Text style={styles.sectionTitle}>Coming up</Text>
-              <Text style={styles.comingUpText}>Join our webinar in 10 days.</Text>
+              <Text style={styles.comingUpText}>
+                Join our webinar in 10 days.
+              </Text>
             </View>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>Webinar</Text>
@@ -229,15 +238,15 @@ const HomeScreen = () => {
             <Text style={styles.referText}>REFER A FRIEND</Text>
           </TouchableOpacity>
         )} */}
-
       </ScrollView>
-
     </SafeAreaView>
   );
 };
 
-const ReminderItem = ({ icon: Icon, label, action }) => (
-  <View style={styles.reminderItem}>
+const ReminderItem = ({ icon: Icon, label, action, line }) => (
+  <View
+    style={[styles.reminderItem, line === 'false' ? styles.reminderLast : null]}
+  >
     <Icon width={40} height={40} style={styles.reminderIcon} />
     <View style={styles.reminderTextRow}>
       <View style={styles.reminderInline}>

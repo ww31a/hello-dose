@@ -31,7 +31,12 @@ const MyProgramScreen = () => {
 
   if (isLoading) {
     return (
-      <View style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View
+        style={[
+          styles.safeArea,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
         <Text>Loading Program...</Text>
       </View>
     );
@@ -39,12 +44,18 @@ const MyProgramScreen = () => {
 
   const program = dashboard?.program;
   const health = dashboard?.healthInsights;
-  const progress = program?.progressPercent ? program.progressPercent / 100 : 0.5;
+  const progress = program?.progressPercent
+    ? program.progressPercent / 100
+    : 0.5;
+  const np = dashboard?.assignedProvider;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <ChevronLeft color={Colors.dark} size={28} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My Program</Text>
@@ -61,13 +72,18 @@ const MyProgramScreen = () => {
           <View style={styles.gaugeContainer}>
             <CircularProgress size={160} strokeWidth={15} progress={progress} />
             <View style={styles.gaugeTextContainer}>
-              <Text style={styles.gaugeValue}>{Math.round(progress * 100)}%</Text>
+              <Text style={styles.gaugeValue}>
+                {Math.round(progress * 100)}%
+              </Text>
               <Text style={styles.gaugeLabel}>GOAL PROGRESS</Text>
             </View>
           </View>
-          <Text style={styles.programTitle}>{program?.name || 'DROP Tirzepatide'}</Text>
+          <Text style={styles.programTitle}>
+            {program?.name || 'DROP Tirzepatide'}
+          </Text>
           <Text style={styles.programSubtitle}>
-            {program?.currentWeightLoss || 0} of {program?.targetWeightLoss || 0} Pounds Lost
+            {program?.currentWeightLoss || 0} of{' '}
+            {program?.targetWeightLoss || 0} Pounds Lost
           </Text>
         </View>
 
@@ -78,10 +94,12 @@ const MyProgramScreen = () => {
             label="DOSAGE"
             value={health?.currentDosage || '0mg'}
             subValue={
-              health?.lastInjectionAt 
-                ? (health.daysSinceLastInjection === 0 ? 'Last Injection: Today' 
-                  : health.daysSinceLastInjection === 1 ? 'Last Injection: Yesterday' 
-                  : `Last Injection: ${health.daysSinceLastInjection} days ago`) 
+              health?.lastInjectionAt
+                ? health.daysSinceLastInjection === 0
+                  ? 'Last Injection: Today'
+                  : health.daysSinceLastInjection === 1
+                  ? 'Last Injection: Yesterday'
+                  : `Last Injection: ${health.daysSinceLastInjection} days ago`
                 : 'No injections logged'
             }
             onPress={() => navigation.navigate('InjectionLogs')}
@@ -89,7 +107,11 @@ const MyProgramScreen = () => {
           <InfoCard
             icon={CalendarIcon}
             label="NEXT REFILL"
-            value={health?.nextRefillDate ? dayjs(health.nextRefillDate).format('MMM D') : 'Pending'}
+            value={
+              health?.nextRefillDate
+                ? dayjs(health.nextRefillDate).format('MMM D')
+                : 'Pending'
+            }
             subValue={health?.nextRefillLabel || 'Refill eligibility'}
           />
         </View>
@@ -102,8 +124,12 @@ const MyProgramScreen = () => {
           >
             <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
             <View style={styles.weightRow}>
-              <Text style={styles.weightValue}>{health?.lastLoggedWeight || '000.0'}</Text>
-              <Text style={styles.weightUnit}>{health?.lastLoggedUnit || 'lbs'}</Text>
+              <Text style={styles.weightValue}>
+                {health?.lastLoggedWeight || '000.0'}
+              </Text>
+              <Text style={styles.weightUnit}>
+                {health?.lastLoggedUnit || 'lbs'}
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -124,8 +150,8 @@ const MyProgramScreen = () => {
             <NurseIcon width={50} height={50} />
           </View>
           <View style={styles.npContent}>
-            <Text style={styles.npName}>Bracha Banayan</Text>
-            <Text style={styles.npTitle}>Board Certified FNP</Text>
+            <Text style={styles.npName}>{np?.name}</Text>
+            <Text style={styles.npTitle}>{np?.title}</Text>
           </View>
           <ChevronRight color="#CBD5E1" size={20} />
         </TouchableOpacity>

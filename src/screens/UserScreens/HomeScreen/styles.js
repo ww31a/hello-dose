@@ -182,6 +182,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F1F5F9',
   },
+  reminderLast:{
+    borderBottomWidth:0,
+    borderBottomColor:'transparent'
+  },
   reminderIcon: {
     marginRight: 10,
   },

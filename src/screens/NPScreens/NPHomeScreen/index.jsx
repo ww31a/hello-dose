@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,11 +14,15 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import Tag from '../../../components/Tag';
 import VideoCallIcon from '../../../assets/icons/video-call.svg';
+import { useQuery } from '@tanstack/react-query';
+import { providerService } from '../../../api/services/provider';
+import { ActivityIndicator } from 'react-native';
+import { Colors } from '../../../theme';
+import { Linking } from 'react-native';
 
 const NPHomeScreen = () => {
   const navigation = useNavigation();
 
-  // Mock Data
   const upcomingAppointments = [
     {
       id: '1',
@@ -36,6 +40,48 @@ const NPHomeScreen = () => {
     },
   ];
 
+  const {
+    data: dashboard,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['providerDashboard'],
+    queryFn: providerService.getDashboard,
+  });
+  const formattedStartTime = dashboard?.nextAppointment?.startTime
+    ? new Date(dashboard.nextAppointment.startTime).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : '';
+
+  const formatTimeParts = time => {
+    const date = new Date(time);
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
+
+    return { time: formattedTime, ampm };
+  };
+  console.log('DASHBOARD:', dashboard);
+
+  if (isLoading) {
+    return (
+      <View
+        style={[
+          styles.safeArea,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <KeyboardAvoidingView
@@ -51,8 +97,17 @@ const NPHomeScreen = () => {
         >
           {/* Header Section */}
           <View style={styles.headerContainer}>
-            <Text style={styles.welcomeText}>Welcome back, Bracha</Text>
-            <Text style={styles.subtitleText}>You have 3 appointments today.</Text>
+            <Text style={styles.welcomeText}>
+              Welcome back,
+              {dashboard?.providerName ? ` ${dashboard.providerName}` : ''}
+            </Text>
+            <Text style={styles.subtitleText}>
+              You have {dashboard?.appointmentsTodayCount || 0}{' '}
+              {dashboard?.appointmentsTodayCount === 1
+                ? ' appointment '
+                : ' appointments '}
+              today.
+            </Text>
           </View>
 
           {/* Next Appointment Card */}
@@ -63,50 +118,70 @@ const NPHomeScreen = () => {
                 <Text style={styles.nextLabel}>NEXT APPOINTMENT</Text>
               </View>
               <View style={styles.timePill}>
-                <Text style={styles.timePillText}>5:00 PM</Text>
+                <Text style={styles.timePillText}>{formattedStartTime}</Text>
               </View>
             </View>
 
-            <Text style={styles.patientNameLarge}>Natalia Ussher</Text>
+            <Text style={styles.patientNameLarge}>
+              {dashboard?.nextAppointment?.patientName}
+            </Text>
 
             <View style={styles.tagsRow}>
               <Tag label="FOLLOW-UP" />
-              <Tag label="TIRZEPATIDE" />
+              <Tag label={dashboard?.nextAppointment?.programName} />
             </View>
 
-            <TouchableOpacity style={styles.startButton}>
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={() => {
+                const url = dashboard?.nextAppointment?.meetingLink;
+                if (url) Linking.openURL(url);
+              }}
+            >
               <Text style={styles.startButtonText}>Start Consultation</Text>
             </TouchableOpacity>
           </View>
 
           {/* Upcoming Today */}
-          <Text style={[styles.sectionTitle, { marginBottom: 16 }]}>Upcoming Today</Text>
+          <Text style={[styles.sectionTitle, { marginBottom: 16 }]}>
+            Upcoming Today
+          </Text>
           <View style={styles.upcomingList}>
-            {upcomingAppointments.map((appt) => (
-              <View key={appt.id} style={styles.upcomingCard}>
-                <View style={styles.timeColumn}>
-                  <Text style={styles.timeText}>{appt.timeStr}</Text>
-                  <Text style={styles.ampmText}>{appt.ampm}</Text>
+            {dashboard?.upcomingToday.map(appt => {
+              const { time, ampm } = formatTimeParts(appt.startTime);
+
+              return (
+                <View key={appt._id} style={styles.upcomingCard}>
+                  <View style={styles.timeColumn}>
+                    <Text style={styles.timeText}>{time}</Text>
+                    <Text style={styles.ampmText}>{ampm}</Text>
+                  </View>
+
+                  <View style={styles.verticalDivider} />
+
+                  <View style={styles.patientInfo}>
+                    <Text style={styles.upcomingName}>{appt.patientName}</Text>
+                    <Text style={styles.upcomingReason}>
+                      {appt.appointmentType}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity>
+                    <VideoCallIcon width={50} height={50} color="#0D9488" />
+                  </TouchableOpacity>
                 </View>
-
-                <View style={styles.verticalDivider} />
-
-                <View style={styles.patientInfo}>
-                  <Text style={styles.upcomingName}>{appt.name}</Text>
-                  <Text style={styles.upcomingReason}>{appt.reason}</Text>
-                </View>
-
-                <TouchableOpacity>
-                  <VideoCallIcon width={50} height={50} color="#0D9488" />
-                </TouchableOpacity>
-              </View>
-            ))}
+              );
+            })}
           </View>
 
           {/* Active Patients Search */}
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.sectionTitle}>Active Patients</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Patients', { screen: 'PatientsList' })}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Patients', { screen: 'PatientsList' })
+              }
+            >
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -119,7 +194,6 @@ const NPHomeScreen = () => {
               placeholderTextColor="#9CA3AF"
             />
           </View>
-
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -34,7 +29,12 @@ const MyNPScreen = () => {
 
   if (isLoading) {
     return (
-      <View style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View
+        style={[
+          styles.safeArea,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
         <Text>Loading NP Details...</Text>
       </View>
     );
@@ -44,14 +44,16 @@ const MyNPScreen = () => {
   const appointment = data?.appointment;
   const isScheduled = !!appointment;
 
-  const formatAppointmentDate = (dateString) => {
+  const formatAppointmentDate = dateString => {
     if (!dateString) return '';
     return dayjs(dateString).tz('America/New_York').format('MMM D, YYYY');
   };
 
-  const formatAppointmentTime = (dateString) => {
+  const formatAppointmentTime = dateString => {
     if (!dateString) return '';
-    return `at ${dayjs(dateString).tz('America/New_York').format('h:mm A')} EST`;
+    return `at ${dayjs(dateString)
+      .tz('America/New_York')
+      .format('h:mm A')} EST`;
   };
 
   const handleBack = () => {
@@ -80,13 +82,34 @@ const MyNPScreen = () => {
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
-            <ProfileIcon width={50} height={50} />
+            {provider?.avatar ? (
+              <View
+                style={{
+                  width: '90%',
+                  height: '90%',
+                  borderRadius: 100, // large enough to force circle
+                  overflow: 'hidden',
+                }}
+              >
+                <Image
+                  source={{ uri: provider.avatar }}
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode="cover"
+                />
+              </View>
+            ) : (
+              <ProfileIcon width={50} height={50} />
+            )}
           </View>
-          <Text style={styles.name}>{provider?.firstName} {provider?.lastName}</Text>
+          <Text style={styles.name}>
+            {provider?.firstName} {provider?.lastName}
+          </Text>
           <Text style={styles.roleLabel}>YOUR CARE LEAD</Text>
 
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{provider?.title || 'Board Certified FNP'}</Text>
+            <Text style={styles.badgeText}>
+              {provider?.title || 'Board Certified FNP'}
+            </Text>
           </View>
         </View>
 
@@ -117,28 +140,43 @@ const MyNPScreen = () => {
               <Text style={styles.cardLabel}>NEXT CHECKIN</Text>
               {isScheduled ? (
                 <Text style={styles.cardValue}>
-                  {appointment.formattedDate || formatAppointmentDate(appointment.startTime)}{' '}
-                  <Text style={{ fontSize: 16, fontFamily: 'PlusJakartaSans-Regular', color: '#6B7280' }}>
-                    {appointment.formattedTime ? `at ${appointment.formattedTime} EST` : formatAppointmentTime(appointment.startTime)}
+                  {appointment.formattedDate ||
+                    formatAppointmentDate(appointment.startTime)}{' '}
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: 'PlusJakartaSans-Regular',
+                      color: '#6B7280',
+                    }}
+                  >
+                    {appointment.formattedTime
+                      ? `at ${appointment.formattedTime} EST`
+                      : formatAppointmentTime(appointment.startTime)}
                   </Text>
                 </Text>
               ) : (
-                <Text style={[styles.cardValue, styles.placeholderValue]}>No check-in scheduled</Text>
+                <Text style={[styles.cardValue, styles.placeholderValue]}>
+                  No check-in scheduled
+                </Text>
               )}
             </View>
 
             {isScheduled ? (
               <View style={styles.statusBadge}>
-                <Text style={styles.statusBadgeText}>In {appointment.daysUntil} Days</Text>
+                <Text style={styles.statusBadgeText}>
+                  In {appointment.daysUntil} Days
+                </Text>
               </View>
             ) : (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.scheduleButton}
-                onPress={() => navigation.navigate('ScheduleAppointment', { 
-                  providerId: provider?._id,
-                  providerName: `${provider?.firstName} ${provider?.lastName}`,
-                  providerTitle: provider?.title || 'Board Certified FNP'
-                })}
+                onPress={() =>
+                  navigation.navigate('ScheduleAppointment', {
+                    providerId: provider?._id,
+                    providerName: `${provider?.firstName} ${provider?.lastName}`,
+                    providerTitle: provider?.title || 'Board Certified FNP',
+                  })
+                }
               >
                 <Text style={styles.scheduleButtonText}>Schedule Now</Text>
               </TouchableOpacity>
@@ -150,7 +188,12 @@ const MyNPScreen = () => {
             <View style={styles.cardContent}>
               <Text style={styles.cardLabel}>NP SINCE</Text>
               <Text style={styles.cardValue}>
-                {provider?.npSince ? new Date(provider.npSince).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Join Date'}
+                {provider?.npSince
+                  ? new Date(provider.npSince).toLocaleDateString('en-US', {
+                      month: 'long',
+                      year: 'numeric',
+                    })
+                  : 'Join Date'}
               </Text>
             </View>
           </View>
@@ -159,14 +202,16 @@ const MyNPScreen = () => {
         <Button
           label="Request Check-in or Reorder"
           variant={isScheduled ? 'disabled' : 'primary'}
-          onPress={() => navigation.navigate('ScheduleAppointment', { 
-            providerId: provider?._id,
-            providerName: `${provider?.firstName} ${provider?.lastName}`,
-            providerTitle: provider?.title || 'Board Certified FNP'
-          })}
+          onPress={() =>
+            navigation.navigate('ScheduleAppointment', {
+              providerAvatar: provider?.avatar,
+              providerId: provider?._id,
+              providerName: `${provider?.firstName} ${provider?.lastName}`,
+              providerTitle: provider?.title || 'Board Certified FNP',
+            })
+          }
           style={styles.ctaButton}
         />
-
       </ScrollView>
     </SafeAreaView>
   );

@@ -7,11 +7,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import Svg, { Circle, Path, Text as SvgText, G, Line, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { useQuery } from '@tanstack/react-query';
 import { Colors, Typography } from '../../../theme';
-import Button from '../../../components/Button';
 import { patientService } from '../../../api/services/patient';
 import styles from './styles';
 import dayjs from "dayjs";
@@ -31,10 +30,6 @@ const WeightTrendScreen = () => {
   });
 
   const historyList = weightData?.history || [];
-  const formattedNpCheckInDate = weightData?.npCheckInDate
-  ? dayjs(weightData?.npCheckInDate).format('MMM D')
-  : null;
-  const npCheckInDate = formattedNpCheckInDate
   const currentMonthName = new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase();
 
 
@@ -74,7 +69,7 @@ const WeightTrendScreen = () => {
 
         {/* Chart Section */}
         <View style={styles.chartContainer}>
-          <WeightChart historyList={historyList} />
+          <WeightChart historyList={historyList} npCheckInDate={weightData?.npCheckinDate} />
         </View>
 
         {/* Current Weight Card */}
@@ -143,6 +138,38 @@ const WeightChart = ({ historyList, npCheckInDate }) => {
 
   // Reverse so oldest is on the left
   const sortedHistory = [...(historyList || [])].reverse();
+
+  // Find NP check-in date position
+  let npCheckInIndex = -1;
+  if (npCheckInDate && sortedHistory.length > 0) {
+    const npDate = dayjs(npCheckInDate).format('YYYY-MM-DD');
+    const minDate = dayjs(sortedHistory[0].date).format('YYYY-MM-DD');
+    const maxDate = dayjs(sortedHistory[sortedHistory.length - 1].date).format('YYYY-MM-DD');
+    
+    // Check if NP date is within range
+    if (npDate >= minDate && npDate <= maxDate) {
+      // Find exact match or between points
+      for (let i = 0; i < sortedHistory.length; i++) {
+        const itemDate = dayjs(sortedHistory[i].date).format('YYYY-MM-DD');
+        if (itemDate === npDate) {
+          npCheckInIndex = i;
+          break;
+        }
+      }
+      // If no exact match, we'll handle it by finding the position between points
+      if (npCheckInIndex === -1) {
+        for (let i = 0; i < sortedHistory.length - 1; i++) {
+          const date1 = dayjs(sortedHistory[i].date).format('YYYY-MM-DD');
+          const date2 = dayjs(sortedHistory[i + 1].date).format('YYYY-MM-DD');
+          if (npDate > date1 && npDate < date2) {
+            // Store as fractional index for positioning between points
+            npCheckInIndex = i + 0.5;
+            break;
+          }
+        }
+      }
+    }
+  }
 
   if (sortedHistory.length === 0) {
     return (
@@ -260,18 +287,33 @@ const WeightChart = ({ historyList, npCheckInDate }) => {
         strokeLinecap="round"
       />
 
-      {/* Data Points */}
-      {points.map((p, i) => (
+      {/* Data Points - Only show latest point */}
+      {points.map((p, i) => {
+        const isLatest = i === points.length - 1;
+
+        return isLatest ? (
+          <Circle
+            key={`p-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={7}
+            stroke="none"
+            fill={Colors.primary}
+          />
+        ) : null;
+      })}
+
+      {/* NP Check-in marker - only between points */}
+      {npCheckInIndex > 0 && npCheckInIndex % 1 !== 0 && (
         <Circle
-          key={`p-${i}`}
-          cx={p.x}
-          cy={p.y}
-          r={i === points.length - 1 ? 7 : 5}
-          stroke={i === points.length - 1 ? 'none' : Colors.primary}
+          cx={getX(npCheckInIndex)}
+          cy={getY((data[Math.floor(npCheckInIndex)] + data[Math.ceil(npCheckInIndex)]) / 2) + 3}
+          r={5}
+          stroke={Colors.primary}
           strokeWidth="2"
-          fill={i === points.length - 1 ? Colors.primary : 'white'}
+          fill="white"
         />
-      ))}
+      )}
 
       {/* X-Axis Labels */}
       {labels.map((label, i) => (
@@ -291,7 +333,7 @@ const WeightChart = ({ historyList, npCheckInDate }) => {
   );
 };
 
-const EntryItem = ({ date, weight, time, isSpecial }) => (
+const EntryItem = ({ date, weight, time }) => (
   <View style={styles.entryItem}>
     <View style={[styles.dateCircle]}>
       <Text style={[styles.dateText]}>{date}</Text>
