@@ -8,58 +8,91 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react-native';
+import { useQuery } from '@tanstack/react-query';
 
 import styles from './styles';
 import Tag from '../../../components/Tag';
-import TickIcon from '../../../assets/icons/tick.svg';
-import TimeIcon from '../../../assets/icons/time.svg';
-
-const PATIENTS_DATA = [
-  {
-    id: '1',
-    name: 'Natalia Ussher',
-    gender: 'Female',
-    age: 34,
-    drug: 'TIRZEPATIDE',
-    lastWeight: '184.2',
-    lastWeightUnit: 'lbs',
-    lastLoggedTime: 'Today',
-    totalLoss: '-12.5',
-    lossDate: 'Since Jan 12',
-    eligible: true,
-    eligibleText: 'Reorder Eligible Now',
-  },
-  {
-    id: '2',
-    name: 'Liam Chen',
-    gender: 'Male',
-    age: 41,
-    drug: 'TIRZEPATIDE',
-    lastWeight: '210.5',
-    lastWeightUnit: 'lbs',
-    lastLoggedTime: '2 days ago',
-    totalLoss: '-8.3',
-    lossDate: 'Since Feb 01',
-    eligible: false,
-    eligibleText: 'Eligible in 5 days',
-  },
-  {
-    id: '3',
-    name: 'James Wilson',
-    gender: 'Male',
-    age: 28,
-    drug: 'SEMAGLUTIDE',
-    lastWeight: '198.4',
-    lastWeightUnit: 'lbs',
-    lastLoggedTime: '1 week ago',
-    totalLoss: '-18.2',
-    lossDate: 'Since Nov 20',
-    eligible: false,
-    eligibleText: 'Eligible in 5 days',
-  },
-];
+// import TickIcon from '../../../assets/icons/tick.svg';
+// import TimeIcon from '../../../assets/icons/time.svg';
+import { providerService } from '../../../api/services/provider';
 
 const PatientsScreen = ({ navigation }) => {
+  const { data: patients, isLoading } = useQuery({
+    queryKey: ['activePatients'],
+    queryFn: providerService.getPatients,
+  });
+
+  const renderPatientCard = (item) => {
+    const { patient, activePrograms } = item;
+    const fullName = `${patient.firstName} ${patient.lastName}`;
+    
+    // Use all active programs from the backend
+    const tags = activePrograms?.map(p => p.name.toUpperCase()) || [];
+
+    return (
+      <TouchableOpacity
+        key={patient._id}
+        style={styles.patientCard}
+        onPress={() => navigation.navigate('PatientProfile', { patient: item })}
+        activeOpacity={0.8}
+      >
+        <View style={styles.cardMainContent}>
+          <View style={styles.cardLeftColumn}>
+            <Text style={styles.patientName}>{fullName}</Text>
+            <Text style={styles.demographics}>
+              {patient.gender || 'Female'}, {patient.age || 34}
+            </Text>
+          </View>
+          <ChevronRight size={24} color="#1E1E26" />
+        </View>
+
+        {/* Tags Row - Now displaying all active programs */}
+        <View style={styles.tagsRow}>
+          {tags.map((tag, idx) => (
+            <Tag key={idx} label={tag} />
+          ))}
+        </View>
+
+        {/* Stats Blocks (Commented out as requested) */}
+        {/* 
+        <View style={styles.statsRow}>
+          <View style={styles.statBlock}>
+            <Text style={styles.statLabel}>LAST LOGGED</Text>
+            <Text style={styles.statValue}>
+              {item.healthInsights?.lastLoggedWeight} <Text style={{ fontSize: 14 }}>{item.healthInsights?.lastLoggedUnit}</Text>
+            </Text>
+            <Text style={styles.statSub}>{item.healthInsights?.lastLoggedLabel}</Text>
+          </View>
+          <View style={styles.statBlock}>
+            <Text style={styles.statLabel}>TOTAL LOSS</Text>
+            <Text style={styles.statValueTeal}>
+              {item.healthInsights?.totalLossPercent} <Text style={{ fontSize: 14 }}>%</Text>
+            </Text>
+            <Text style={styles.statSub}>Since start</Text>
+          </View>
+        </View>
+        */}
+
+        {/* Eligibility Footer (Commented out as requested) */}
+        {/* 
+        <View style={styles.eligibilityRow}>
+          <View style={styles.eligibilityLeft}>
+            {item.program?.reorderStatus === 'eligible_now' ? (
+              <TickIcon width={20} height={20} color="#0D9488" />
+            ) : (
+              <TimeIcon width={30} height={30} color="#64748B" />
+            )}
+            <Text style={item.program?.reorderStatus === 'eligible_now' ? styles.eligibleText : styles.pendingText}>
+              {item.program?.nextRefillLabel}
+            </Text>
+          </View>
+          <ChevronRight size={18} color={item.program?.reorderStatus === 'eligible_now' ? '#0D9488' : '#64748B'} />
+        </View>
+        */}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Header */}
@@ -85,58 +118,13 @@ const PatientsScreen = ({ navigation }) => {
         </View>
 
         {/* Patient Cards */}
-        {PATIENTS_DATA.map((patient) => (
-          <TouchableOpacity
-            key={patient.id}
-            style={styles.patientCard}
-            onPress={() => navigation.navigate('PatientProfile', { patient })}
-            activeOpacity={0.8}
-          >
-            {/* Name + Tag */}
-            <View style={styles.cardHeaderRow}>
-              <Text style={styles.patientName}>{patient.name}</Text>
-              <Tag label={patient.drug} />
-            </View>
-
-            {/* Demographics */}
-            <Text style={styles.demographics}>
-              {patient.gender}, {patient.age}
-            </Text>
-
-            {/* Stats Blocks */}
-            <View style={styles.statsRow}>
-              <View style={styles.statBlock}>
-                <Text style={styles.statLabel}>LAST LOGGED</Text>
-                <Text style={styles.statValue}>
-                  {patient.lastWeight} <Text style={{ fontSize: 14 }}>{patient.lastWeightUnit}</Text>
-                </Text>
-                <Text style={styles.statSub}>{patient.lastLoggedTime}</Text>
-              </View>
-              <View style={styles.statBlock}>
-                <Text style={styles.statLabel}>TOTAL LOSS</Text>
-                <Text style={styles.statValueTeal}>
-                  {patient.totalLoss} <Text style={{ fontSize: 14 }}>%</Text>
-                </Text>
-                <Text style={styles.statSub}>{patient.lossDate}</Text>
-              </View>
-            </View>
-
-            {/* Eligibility Footer */}
-            <View style={styles.eligibilityRow}>
-              <View style={styles.eligibilityLeft}>
-                {patient.eligible ? (
-                  <TickIcon width={20} height={20} color="#0D9488" />
-                ) : (
-                  <TimeIcon width={30} height={30} color="#64748B" />
-                )}
-                <Text style={patient.eligible ? styles.eligibleText : styles.pendingText}>
-                  {patient.eligibleText}
-                </Text>
-              </View>
-              <ChevronRight size={18} color={patient.eligible ? '#0D9488' : '#64748B'} />
-            </View>
-          </TouchableOpacity>
-        ))}
+        {isLoading ? (
+          <View style={{ padding: 20 }}>
+            <Text style={{ textAlign: 'center', color: '#64748B' }}>Loading patients...</Text>
+          </View>
+        ) : (
+          patients?.map((item) => renderPatientCard(item))
+        )}
       </ScrollView>
     </SafeAreaView>
   );

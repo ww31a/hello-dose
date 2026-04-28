@@ -124,13 +124,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 5,
+  },
+  programsList: {
+    paddingBottom: 20,
+    paddingHorizontal: 20, // Match scrollContent padding
+  },
+  programCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 24,
+    padding: 20,
+    width: 320, // Fixed width for horizontal scrolling
+    marginRight: 16,
+    // Shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 2,
   },
   cardLabel: {
     fontSize: 12,
     fontFamily: Typography.fontFamily.medium,
     color: '#94A3B8',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  nextInjectionText: {
+    fontSize: 14,
+    fontFamily: Typography.fontFamily.bold,
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  nextInjectionOrange: {
+    color: Colors.peptide,
+  },
+  nextInjectionDark: {
+    color: Colors.weightLoss,
   },
   programRow: {
     flexDirection: 'row',
@@ -142,12 +172,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    fontFamily: Typography.fontFamily.regular,
-    color: '#64748B',
-    marginBottom: 20,
   },
   buttonRow: {
     flexDirection: 'row',

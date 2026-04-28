@@ -8,12 +8,13 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { ChevronLeft } from 'lucide-react-native';
 import DatePicker from 'react-native-date-picker';
 import { Colors } from '../../../theme';
 import Button from '../../../components/Button';
+import Tag from '../../../components/Tag';
 import { patientService } from '../../../api/services/patient';
 
 import CalendarIcon from '../../../assets/icons/calender-2.svg';
@@ -32,6 +33,7 @@ const injectionSites = ['L Abdomen', 'R Abdomen', 'L Thigh', 'R Thigh'];
 
 const LogInjectionScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const queryClient = useQueryClient();
 
   const { data: dashboard } = useQuery({
@@ -196,6 +198,16 @@ const LogInjectionScreen = () => {
             value={notes}
             onChangeText={setNotes}
           />
+          <View style={styles.divider} />
+          {/* INJECTING FOR */}
+          <Text style={styles.sectionLabel}>INJECTING FOR</Text>
+          <View style={{ flexDirection: 'row', marginTop: 8 }}>
+            <Tag 
+              label={
+                dashboard?.programs?.find(p => p._id === route.params?.programId)?.name || 'Tirzepatide'
+              } 
+            />
+          </View>
         </View>
 
         {/* FOOTER */}

@@ -1,25 +1,40 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DeviceEventEmitter } from 'react-native';
 
-// Production-grade base URL configuration
-// For Android Emulators, 'localhost' refers to the device itself.
-// The host machine is accessible at '10.0.2.2'.
-const BASE_URL = Platform.select({
-  android: 'http://10.0.2.2:5001',
-  ios: 'http://localhost:5001',
-  default: 'http://localhost:5001',
-});
+
+const BASE_URL = __DEV__
+  ? Platform.select({
+      android: 'http://10.0.2.2:5001',
+      ios: 'http://localhost:5001',
+      default: 'http://localhost:5001',
+    })
+  : 'https://hellodose-backend.onrender.com';
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Request Interceptor: Attach Auth Token
+// ── Token refresh queue ──
+// Prevents multiple simultaneous refresh calls when several requests 401 at once
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+// ── Request Interceptor ──
 apiClient.interceptors.request.use(
   async (config) => {
     try {
@@ -32,28 +47,73 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Global Data Unwrap & Error Handling
+// ── Response Interceptor ──
 apiClient.interceptors.response.use(
-  (response) => {
-    // Return only the data payload from the ApiResponse structure
-    return response.data?.data;
-  },
+  (response) => response.data?.data,
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle 401 Unauthorized (e.g., token expired)
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Only attempt refresh on 401, and not for auth endpoints themselves
+    // (prevents infinite loops on login/refresh failures)
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/');
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+      
+      // If a refresh is already in flight, queue this request
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
       originalRequest._retry = true;
-      console.warn('Unauthorized request. Token might be expired.');
+      isRefreshing = true;
+
+      try {
+        const refreshToken = await AsyncStorage.getItem('refreshToken');
+        if (!refreshToken) {
+          throw new Error('No refresh token stored');
+        }
+
+        // Call refresh endpoint — use plain axios to avoid interceptor loop
+        const { data } = await axios.post(`${BASE_URL}/api/v1/auth/refresh-token`, {
+          refreshToken,
+        });
+
+        const newAccessToken = data?.data?.accessToken;
+        const newRefreshToken = data?.data?.refreshToken;
+
+        await AsyncStorage.setItem('accessToken', newAccessToken);
+        if (newRefreshToken) {
+          await AsyncStorage.setItem('refreshToken', newRefreshToken);
+        }
+
+        // Retry all queued requests with new token
+        processQueue(null, newAccessToken);
+
+        // Retry the original request
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        // Refresh failed — clear storage and let the app handle sign-out
+        processQueue(refreshError, null);
+        await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userRole'])
+        DeviceEventEmitter.emit('onSessionExpired');
+        // Optionally emit an event here so your app can redirect to login
+        // e.g. DeviceEventEmitter.emit('onSessionExpired');
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
 
-    // Standardize error format for frontend consumption
-    // We try to extract the message from backend's ApiResponse structure if available
     const customError = {
       message: error.response?.data?.message || error.message || 'An unexpected error occurred',
       status: error.response?.status,

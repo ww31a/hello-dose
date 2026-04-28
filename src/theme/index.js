@@ -13,6 +13,8 @@ export const Colors = {
   tabActive: '#1E1E26',
   tabInactive: '#94A3B8',
   tabBackground: '#FFFFFF',
+  peptide: '#F59E0B',
+  weightLoss: '#1E1E26',
 };
 
 export const Spacing = {

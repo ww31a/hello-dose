@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography } from '../../../theme';
+import { Typography } from '../../../theme';
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -66,24 +66,33 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
-  cardHeaderRow: {
+  cardMainContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 12,
+  },
+  cardLeftColumn: {
+    flex: 1,
   },
   patientName: {
     fontSize: 22,
     fontFamily: Typography.fontFamily.bold,
     color: '#1E1E26',
+    marginBottom: 4,
   },
   demographics: {
     fontSize: 13,
     fontFamily: Typography.fontFamily.medium,
     color: '#64748B',
-    marginBottom: 16,
   },
-  // Stats Row
+  tagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 8,
+  },
+  // Stats Row (Preserved for compatibility)
   statsRow: {
     flexDirection: 'row',
     gap: 12,
@@ -120,7 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.medium,
     color: '#64748B',
   },
-  // Eligibility Footer
+  // Eligibility Footer (Preserved for compatibility)
   eligibilityRow: {
     flexDirection: 'row',
     alignItems: 'center',

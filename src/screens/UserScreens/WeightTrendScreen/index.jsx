@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -19,15 +20,32 @@ import dayjs from "dayjs";
 const WeightTrendScreen = () => {
   const navigation = useNavigation();
 
-  const { data: dashboardData } = useQuery({
+  const { data: dashboardData, isLoading: isDashboardLoading } = useQuery({
     queryKey: ['patientDashboard'],
     queryFn: patientService.getDashboard,
   });
 
-  const { data: weightData } = useQuery({
+  const { data: weightData, isLoading: isWeightLoading } = useQuery({
     queryKey: ['weightHistory'],
     queryFn: patientService.getWeightHistory,
   });
+
+  if (isDashboardLoading || isWeightLoading) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <ChevronLeft color={Colors.dark} size={28} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Weight Trend</Text>
+          <View style={styles.headerRight} />
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const historyList = weightData?.history || [];
   const currentMonthName = new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase();
@@ -36,8 +54,14 @@ const WeightTrendScreen = () => {
   const healthInsights = dashboardData?.healthInsights || {};
   const currentWeight = healthInsights.lastLoggedWeight ? Number(healthInsights.lastLoggedWeight).toFixed(1) : '--';
   const currentUnit = healthInsights.lastLoggedUnit || 'lbs';
-  const weightChange = healthInsights.totalLossPercent || 0;
-  const isLoss = weightChange > 0;
+  
+  // Find the primary weight-loss program to get its start weight if possible, 
+  // though totalLossPercent from backend is already per-program.
+  // Assuming the first program is the primary one for weight loss.
+  const weightLossProgram = dashboardData?.programs?.find(p => p.type === 'weight-loss');
+  const weightChange = weightLossProgram?.healthInsights?.totalLossPercent || 0;
+  const isLoss = weightChange < 0; // Negative change means weight lost
+
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>

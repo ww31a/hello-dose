@@ -146,6 +146,58 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.medium,
     color: '#94A3B8',
   },
+  programsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+  },
+  viewAll: {
+    fontSize: 14,
+    fontFamily: Typography.fontFamily.semiBold,
+    color: '#0D9488',
+  },
+  programCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 32,
+    padding: 24,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  cardTypeLabel: {
+    fontSize: 12,
+    fontFamily: Typography.fontFamily.medium,
+    color: '#94A3B8',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+  cardMainRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  programName: {
+    fontSize: 22,
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.dark,
+  },
+  nextInjectionOrange: {
+    color: '#F59E0B',
+    fontFamily: Typography.fontFamily.bold,
+    fontSize: 14,
+    marginTop: 12,
+  },
   detailsCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
@@ -157,7 +209,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 10,
     elevation: 2,
-    marginBottom: 20, // Add space for footer banner
+    marginTop: 16,
+    marginBottom: 40,
   },
   detailRow: {
     flexDirection: 'row',
@@ -173,7 +226,7 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 14,
     fontFamily: Typography.fontFamily.medium,
-    color: '#9CA3AF',
+    color: '#94A3B8',
   },
   reorderBadge: {
     backgroundColor: '#F3F4F6',
@@ -193,16 +246,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0FDFA',
     paddingHorizontal: 24,
     paddingVertical: 16,
+    marginHorizontal: -24, // Break out of scroll padding
   },
   footerTextLeft: {
     fontSize: 13,
     fontFamily: Typography.fontFamily.medium,
-    color: '#4B5563',
+    color: '#64748B',
+    marginLeft: 20,
   },
   footerTextRight: {
     fontSize: 13,
     fontFamily: Typography.fontFamily.medium,
-    color: '#4B5563',
+    color: '#64748B',
+    marginRight: 20,
   },
 });
 

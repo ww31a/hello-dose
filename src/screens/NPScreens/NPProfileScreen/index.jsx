@@ -62,7 +62,7 @@ const NPProfileScreen = () => {
         <View style={styles.infoCard}>
           <View style={styles.availabilityHeader}>
             <Text style={styles.cardLabel}>AVAILABILITY</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('ManageSchedule')}>
+            <TouchableOpacity>
               <Text style={styles.manageLink}>Manage Schedule</Text>
             </TouchableOpacity>
           </View>

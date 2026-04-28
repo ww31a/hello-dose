@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import Svg, { Circle, G } from 'react-native-svg';
@@ -23,7 +23,8 @@ import styles from './styles';
 
 const MyProgramScreen = () => {
   const navigation = useNavigation();
-
+  const route = useRoute();
+  const { programId } = route.params || {};
   const { data: dashboard, isLoading } = useQuery({
     queryKey: ['patientDashboard'],
     queryFn: patientService.getDashboard,
@@ -42,11 +43,14 @@ const MyProgramScreen = () => {
     );
   }
 
-  const program = dashboard?.program;
-  const health = dashboard?.healthInsights;
+  const program = programId 
+    ? dashboard?.programs?.find(p => p._id === programId)
+    : dashboard?.programs?.[0];
+  
+  const health = program?.healthInsights;
   const progress = program?.progressPercent
     ? program.progressPercent / 100
-    : 0.5;
+    : 0;
   const np = dashboard?.assignedProvider;
 
   return (
@@ -67,25 +71,34 @@ const MyProgramScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Goal Progress Card */}
-        <View style={styles.mainCard}>
-          <View style={styles.gaugeContainer}>
-            <CircularProgress size={160} strokeWidth={15} progress={progress} />
-            <View style={styles.gaugeTextContainer}>
-              <Text style={styles.gaugeValue}>
-                {Math.round(progress * 100)}%
-              </Text>
-              <Text style={styles.gaugeLabel}>GOAL PROGRESS</Text>
-            </View>
+        {/* Program Card */}
+        {program?.type === 'peptide' ? (
+          <View style={styles.peptideCard}>
+            <Text style={styles.peptideTitle}>
+              {program?.name || 'Peptide Program'}
+            </Text>
           </View>
-          <Text style={styles.programTitle}>
-            {program?.name || 'DROP Tirzepatide'}
-          </Text>
-          <Text style={styles.programSubtitle}>
-            {program?.currentWeightLoss || 0} of{' '}
-            {program?.targetWeightLoss || 0} Pounds Lost
-          </Text>
-        </View>
+        ) : (
+          /* Goal Progress Card */
+          <View style={styles.mainCard}>
+            <View style={styles.gaugeContainer}>
+              <CircularProgress size={160} strokeWidth={15} progress={progress} />
+              <View style={styles.gaugeTextContainer}>
+                <Text style={styles.gaugeValue}>
+                  {Math.round(progress * 100)}%
+                </Text>
+                <Text style={styles.gaugeLabel}>GOAL PROGRESS</Text>
+              </View>
+            </View>
+            <Text style={styles.programTitle}>
+              {program?.name || 'DROP Tirzepatide'}
+            </Text>
+            <Text style={styles.programSubtitle}>
+              {program?.currentWeightLoss || 0} of{' '}
+              {program?.targetWeightLoss || 0} Pounds Lost
+            </Text>
+          </View>
+        )}
 
         {/* Info Cards Row */}
         <View style={styles.infoRow}>
@@ -116,29 +129,31 @@ const MyProgramScreen = () => {
           />
         </View>
 
-        {/* Weight Logging Card */}
-        <View style={styles.weightCard}>
-          <TouchableOpacity
-            style={styles.weightContent}
-            onPress={() => navigation.navigate('WeightTrend')}
-          >
-            <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
-            <View style={styles.weightRow}>
-              <Text style={styles.weightValue}>
-                {health?.lastLoggedWeight || '000.0'}
-              </Text>
-              <Text style={styles.weightUnit}>
-                {health?.lastLoggedUnit || 'lbs'}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.logWeightButton}
-            onPress={() => navigation.navigate('WeightTrend')}
-          >
-            <Text style={styles.logWeightText}>Log Weight</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Weight Logging Card (only for weight-loss) */}
+        {program?.type !== 'peptide' && (
+          <View style={styles.weightCard}>
+            <TouchableOpacity
+              style={styles.weightContent}
+              onPress={() => navigation.navigate('WeightTrend')}
+            >
+              <Text style={styles.weightLabel}>CURRENT WEIGHT</Text>
+              <View style={styles.weightRow}>
+                <Text style={styles.weightValue}>
+                  {dashboard?.healthInsights?.lastLoggedWeight || '000.0'}
+                </Text>
+                <Text style={styles.weightUnit}>
+                  {dashboard?.healthInsights?.lastLoggedUnit || 'lbs'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.logWeightButton}
+              onPress={() => navigation.navigate('UpdateWeight')}
+            >
+              <Text style={styles.logWeightText}>Log Weight</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* My NP Details */}
         <Text style={styles.sectionHeader}>My NP Details</Text>
@@ -160,7 +175,7 @@ const MyProgramScreen = () => {
         <View style={styles.actionButtonContainer}>
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => navigation.navigate('LogInjection')}
+            onPress={() => navigation.navigate('LogInjection', { programId: program?._id })}
           >
             <Text style={styles.actionButtonText}>Log Injection</Text>
           </TouchableOpacity>

@@ -6,7 +6,15 @@ import styles from './styles';
 const TAG_VARIANTS = {
   'TIRZEPATIDE': { bg: '#7399FA', color: '#E3DDFF' },
   'SEMAGLUTIDE': { bg: '#47BE14', color: '#D8F2C0' },
-  'FOLLOW-UP': { bg: '#1E1E26', color: '#FFFFFF' }, // Based on the screenshot for general tags
+  'BPC-157': { bg: '#EC6A00', color: '#000000' },
+  'MOTS-C': { bg: '#8977FF', color: '#FFFFFF' },
+  'GHK-CU': { bg: '#FFD415', color: '#000000' },
+  'TB-500': { bg: '#006842', color: '#FFFFFF' },
+  'TESAMORELIN': { bg: '#005BDB', color: '#FFFFFF' },
+  'SERMORELIN': { bg: '#B8CBFF', color: '#000000' },
+  'FOLLOW-UP': { bg: '#1E1E26', color: '#FFFFFF' },
+  'WEIGHT-LOSS': { bg: '#F1F5F9', color: '#64748B' },
+  'PEPTIDE': { bg: '#F1F5F9', color: '#64748B' },
   // Fallback styling
   'DEFAULT': { bg: '#E5E7EB', color: '#4B5563' },
 };

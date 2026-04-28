@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from '../../screens/CommonScreens/WelcomeScreen';
 import TabNavigator from '../TabNavigator';
@@ -10,10 +10,18 @@ import ScheduleAppointmentScreen from '../../screens/UserScreens/ScheduleAppoint
 import SelectTimeSlotScreen from '../../screens/UserScreens/SelectTimeSlot';
 import NPLoginScreen from '../../screens/NPScreens/NPLoginScreen';
 import ManageScheduleScreen from '../../screens/NPScreens/ManageScheduleScreen';
+import { DeviceEventEmitter } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
+  useEffect(() => {
+  const sub = DeviceEventEmitter.addListener('onSessionExpired', () => {
+    // whatever your logout navigation looks like
+    navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+  });
+  return () => sub.remove();
+}, []);
   return (
     <Stack.Navigator
       initialRouteName="Welcome"

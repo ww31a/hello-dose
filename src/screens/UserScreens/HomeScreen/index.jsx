@@ -118,49 +118,65 @@ const HomeScreen = () => {
           </View>
         )} */}
 
-        {/* Current Program Card */}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('MyProgram')}
-        >
-          <View style={styles.cardHeader}>
-            <Text style={styles.cardLabel}>YOUR CURRENT PROGRAM</Text>
-          </View>
+        {/* Programs Horizontal List */}
+        <View style={{ marginHorizontal: -20, marginBottom: 10 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+          >
+            {dashboard?.programs?.map((program, index) => (
+              <TouchableOpacity
+                key={program._id || index}
+                style={styles.programCard}
+                onPress={() => navigation.navigate('MyProgram', { programId: program._id })}
+              >
+                <View style={styles.cardHeader}>
+                  <Text style={styles.cardLabel}>
+                    {(program.type || 'weight-loss').toUpperCase()}
+                  </Text>
+                </View>
 
-          <View style={styles.programRow}>
-            <Text style={styles.programTitle}>
-              {dashboard?.program?.name || 'DROP Tirzepatide'} (
-              {dashboard?.healthInsights?.currentDosage || '0mg'})
-            </Text>
-            <ChevronRight color={Colors.dark} size={24} />
-          </View>
+                <View style={styles.programRow}>
+                  <Text style={styles.programTitle}>
+                    {program.name || 'DROP Tirzepatide'}
+                  </Text>
+                  <ChevronRight color={Colors.dark} size={24} />
+                </View>
 
-          <Text style={styles.cardSubtitle}>
-            {dashboard?.healthInsights?.lastInjectionAt
-              ? dashboard.healthInsights.daysSinceLastInjection === 0
-                ? 'Last Injection: Today'
-                : dashboard.healthInsights.daysSinceLastInjection === 1
-                ? 'Last Injection: Yesterday'
-                : `Last Injection: ${dashboard.healthInsights.daysSinceLastInjection} days ago`
-              : 'Ready for your first log?'}
-          </Text>
+                <Text
+                  style={[
+                    styles.nextInjectionText,
+                    program.type === 'peptide'
+                      ? styles.nextInjectionOrange
+                      : styles.nextInjectionDark,
+                  ]}
+                >
+                  Next Injection in:{' '}
+                  <Text>
+                    {program.healthInsights?.nextInjectionLabel || '7 days'}
+                  </Text>
+                </Text>
 
-          <View style={styles.buttonRow}>
-            <Button
-              label="Log Injection"
-              variant="primary"
-              onPress={() => navigation.navigate('LogInjection')}
-              style={styles.cardButton}
-              textStyle={styles.cardButtonText}
-            />
-            <Button
-              label="Reorder"
-              variant="secondary"
-              onPress={() => {}}
-              style={styles.cardButton}
-            />
-          </View>
-        </TouchableOpacity>
+                <View style={styles.buttonRow}>
+                  <Button
+                    label="Log Injection"
+                    variant="primary"
+                    onPress={() => navigation.navigate('LogInjection', { programId: program._id })}
+                    style={styles.cardButton}
+                    textStyle={styles.cardButtonText}
+                  />
+                  <Button
+                    label="Reorder"
+                    variant="secondary"
+                    onPress={() => {}}
+                    style={styles.cardButton}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
         {/* Daily Reminders Card */}
         <View style={styles.card}>
@@ -170,8 +186,9 @@ const HomeScreen = () => {
           </View>
           <Text style={styles.reminderWait}>Your Next Injection is in</Text>
           <Text style={styles.reminderTitle}>
-            {dashboard?.healthInsights?.nextInjectionLabel || '4 days'}
+            {dashboard?.programs?.[0]?.healthInsights?.nextInjectionLabel || '4 days'}
           </Text>
+
 
           <View>
             <ReminderItem icon={WalkIcon} label="Walk 10k steps a day" />
