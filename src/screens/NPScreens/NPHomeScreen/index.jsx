@@ -111,8 +111,10 @@ const NPHomeScreen = () => {
               </Text>
 
               <View style={styles.tagsRow}>
-                <Tag label="FOLLOW-UP" />
-                <Tag label={dashboard.nextAppointment.programName} />
+                <Tag label={dashboard.nextAppointment.appointmentType?.toUpperCase() || "FOLLOW-UP"} />
+                {dashboard.nextAppointment.programNames?.map((name, index) => (
+                  <Tag key={index} label={name.toUpperCase()} />
+                )) || <Tag label={dashboard.nextAppointment.programName?.toUpperCase()} />}
               </View>
 
               <TouchableOpacity
@@ -155,7 +157,7 @@ const NPHomeScreen = () => {
                         {appt.patientName}
                       </Text>
                       <Text style={styles.upcomingReason}>
-                        {appt.appointmentType} • {appt.programName}
+                        {appt.appointmentType} • {appt.programNames?.join(' & ') || appt.programName}
                       </Text>
                     </View>
 

@@ -192,12 +192,13 @@ const styles = StyleSheet.create({
     fontFamily: Typography.fontFamily.regular,
     color: '#64748B',
     marginBottom: 4,
+    marginTop:10
   },
   reminderTitle: {
     fontSize: 32,
     fontFamily: Typography.fontFamily.bold,
     color: Colors.dark,
-    marginBottom: 20,
+    marginBottom: 5,
   },
   reminderItem: {
     flexDirection: 'row',

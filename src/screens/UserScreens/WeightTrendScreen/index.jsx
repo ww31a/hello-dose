@@ -59,8 +59,18 @@ const WeightTrendScreen = () => {
   // though totalLossPercent from backend is already per-program.
   // Assuming the first program is the primary one for weight loss.
   const weightLossProgram = dashboardData?.programs?.find(p => p.type === 'weight-loss');
-  const weightChange = weightLossProgram?.healthInsights?.totalLossPercent || 0;
-  const isLoss = weightChange < 0; // Negative change means weight lost
+  const startWeight = weightLossProgram?.startWeight;
+  const currentWeightNum = healthInsights.lastLoggedWeight;
+
+  // Prefer backend-calculated percentage, fallback to local calculation
+  let weightChange = weightLossProgram?.healthInsights?.totalLossPercent;
+  
+  if ((weightChange === undefined || weightChange === null) && startWeight && currentWeightNum) {
+    weightChange = Math.round(((currentWeightNum - startWeight) / startWeight) * 100 * 10) / 10;
+  }
+
+  const isLoss = (weightChange || 0) < 0;
+  const hasChange = (weightChange || 0) !== 0;
 
 
   return (
@@ -103,13 +113,20 @@ const WeightTrendScreen = () => {
             <View style={styles.weightRow}>
               <Text style={styles.summaryWeight}>{currentWeight}</Text>
               <Text style={styles.summaryUnit}>{currentUnit}</Text>
-              {currentWeight !== '--' && (
-                <View style={[styles.badge, !isLoss && { backgroundColor: '#FEE2E2' }]}>
-                  <Text style={[styles.badgeText, !isLoss && { color: '#EF4444' }]}>
-                    {isLoss ? '▼' : '▲'} {Math.abs(weightChange)}%
+                <View style={[
+                  styles.badge, 
+                  hasChange && !isLoss && { backgroundColor: '#FEE2E2' },
+                  !hasChange && { backgroundColor: '#F1F5F9' },
+                  currentWeight === '--' && { opacity: 0 }
+                ]}>
+                  <Text style={[
+                    styles.badgeText, 
+                    hasChange && !isLoss && { color: '#EF4444' },
+                    !hasChange && { color: '#64748B' }
+                  ]}>
+                    {hasChange && (isLoss ? '▼ ' : '▲ ')}{Math.abs(weightChange || 0)}%
                   </Text>
                 </View>
-              )}
             </View>
           </View>
           <TouchableOpacity

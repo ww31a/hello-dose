@@ -152,10 +152,9 @@ const HomeScreen = () => {
                       : styles.nextInjectionDark,
                   ]}
                 >
-                  Next Injection in:{' '}
-                  <Text>
-                    {program.healthInsights?.nextInjectionLabel || '7 days'}
-                  </Text>
+                  {program.healthInsights?.nextInjectionLabel?.toLowerCase() === 'today'
+                    ? 'Next injection is Today'
+                    : `Next injection is in ${program.healthInsights?.nextInjectionLabel || '7 days'}`}
                 </Text>
 
                 <View style={styles.buttonRow}>
@@ -184,7 +183,11 @@ const HomeScreen = () => {
             <Text style={styles.cardLabel}>DAILY REMINDERS</Text>
             <BellIcon width={18} height={18} />
           </View>
-          <Text style={styles.reminderWait}>Your Next Injection is in</Text>
+          <Text style={styles.reminderWait}>
+            {dashboard?.programs?.[0]?.healthInsights?.nextInjectionLabel?.toLowerCase() === 'today'
+              ? 'Your Next injection is'
+              : 'Your Next Injection is in'}
+          </Text>
           <Text style={styles.reminderTitle}>
             {dashboard?.programs?.[0]?.healthInsights?.nextInjectionLabel || '4 days'}
           </Text>

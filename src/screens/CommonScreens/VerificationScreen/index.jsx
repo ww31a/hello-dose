@@ -134,7 +134,7 @@ const VerificationScreen = () => {
           <View style={styles.linksRow}>
             <Text style={styles.mutedText}>Not {email}? </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate(loginRouteName)}
+              onPress={() => navigation.goBack()}
             >
               <Text style={styles.changeEmailLink}>Change Email</Text>
             </TouchableOpacity>

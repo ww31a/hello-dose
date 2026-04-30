@@ -115,7 +115,7 @@ const MyProgramScreen = () => {
                   : `Last Injection: ${health.daysSinceLastInjection} days ago`
                 : 'No injections logged'
             }
-            onPress={() => navigation.navigate('InjectionLogs')}
+            onPress={() => navigation.navigate('InjectionLogs', { programId: program?._id })}
           />
           <InfoCard
             icon={CalendarIcon}
@@ -148,7 +148,7 @@ const MyProgramScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.logWeightButton}
-              onPress={() => navigation.navigate('UpdateWeight')}
+              onPress={() => navigation.navigate('WeightTrend')}
             >
               <Text style={styles.logWeightText}>Log Weight</Text>
             </TouchableOpacity>

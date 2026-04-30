@@ -6,7 +6,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../../theme';
 import { useQuery } from '@tanstack/react-query';
@@ -16,26 +16,47 @@ import styles from './styles';
 
 const InjectionLogsScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { programId } = route.params || {};
+
+  const { data: dashboard } = useQuery({
+    queryKey: ['patientDashboard'],
+    queryFn: patientService.getDashboard,
+  });
 
   const { data: logData } = useQuery({
     queryKey: ['injectionHistory'],
     queryFn: patientService.getInjectionHistory,
   });
 
+  const program = programId
+    ? dashboard?.programs?.find((p) => p._id === programId)
+    : dashboard?.programs?.[0];
+
   const injectionHistory = logData?.history || [];
-  const monthlyProgress = logData?.monthlyProgress || { count: 0, total: 4, percentage: 0 };
+  const monthlyProgress = logData?.monthlyProgress || {
+    count: 0,
+    total: 4,
+    percentage: 0,
+  };
   const progressWidth = `${monthlyProgress.percentage}%`;
-  
-  const currentMonthName = new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase();
-  const lastInjectionAge = injectionHistory.length > 0
-    ? dayjs().diff(dayjs(injectionHistory[0].injectedAt), 'day')
-    : null;
-    
-  const lastInjectionCaption = lastInjectionAge === null 
-    ? 'No injections logged' 
-    : lastInjectionAge === 0 ? 'Last Injection: Today' 
-    : lastInjectionAge === 1 ? 'Last Injection: Yesterday' 
-    : `Last Injection: ${lastInjectionAge} days ago`;
+
+  const currentMonthName = new Date()
+    .toLocaleString('en-US', { month: 'long' })
+    .toUpperCase();
+  const lastInjectionAge =
+    injectionHistory.length > 0
+      ? dayjs().diff(dayjs(injectionHistory[0].injectedAt), 'day')
+      : null;
+
+  const lastInjectionCaption =
+    lastInjectionAge === null
+      ? 'No injections logged'
+      : lastInjectionAge === 0
+      ? 'Last Injection: Today'
+      : lastInjectionAge === 1
+      ? 'Last Injection: Yesterday'
+      : `Last Injection: ${lastInjectionAge} days ago`;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -55,15 +76,27 @@ const InjectionLogsScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.summaryCard}>
-          <Text style={styles.sectionEyebrow}>MONTHLY PROGRESS</Text>
-          <Text style={styles.summaryValue}>{monthlyProgress.count} of {monthlyProgress.total} Injections</Text>
-          <Text style={styles.summaryCaption}>{lastInjectionCaption}</Text>
-
-          <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, { width: progressWidth }]} />
-          </View>
+        {/* Program Name Card */}
+        <View style={styles.programNameCard}>
+          <Text style={styles.programNameText}>
+            {program?.name || 'Program'}
+          </Text>
         </View>
+
+        {/* Monthly Progress (only for weight-loss/tirzepatide) */}
+        {program?.type !== 'peptide' && (
+          <View style={styles.summaryCard}>
+            <Text style={styles.sectionEyebrow}>MONTHLY PROGRESS</Text>
+            <Text style={styles.summaryValue}>
+              {monthlyProgress.count} of {monthlyProgress.total} Injections
+            </Text>
+            <Text style={styles.summaryCaption}>{lastInjectionCaption}</Text>
+
+            <View style={styles.progressTrack}>
+              <View style={[styles.progressFill, { width: progressWidth }]} />
+            </View>
+          </View>
+        )}
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionTitle}>Past Injections</Text>
@@ -78,17 +111,27 @@ const InjectionLogsScreen = () => {
 
         <View style={styles.logList}>
           {injectionHistory.length === 0 ? (
-            <Text style={{ textAlign: 'center', marginTop: 20, color: '#94A3B8' }}>No injections logged</Text>
+            <Text
+              style={{ textAlign: 'center', marginTop: 20, color: '#94A3B8' }}
+            >
+              No injections logged
+            </Text>
           ) : (
             injectionHistory.map((item) => (
               <View key={item._id} style={styles.logCard}>
                 <View style={styles.logDayBadge}>
-                  <Text style={styles.logDayText}>{dayjs(item.injectedAt).format('D')}</Text>
+                  <Text style={styles.logDayText}>
+                    {dayjs(item.injectedAt).format('D')}
+                  </Text>
                 </View>
 
                 <View style={styles.logMeta}>
-                  <Text style={styles.logDate}>{dayjs(item.injectedAt).format('MMM D')}</Text>
-                  <Text style={styles.logTime}>{dayjs(item.injectedAt).format('h:mm A')}</Text>
+                  <Text style={styles.logDate}>
+                    {dayjs(item.injectedAt).format('MMM D')}
+                  </Text>
+                  <Text style={styles.logTime}>
+                    {dayjs(item.injectedAt).format('h:mm A')}
+                  </Text>
                 </View>
 
                 <View style={styles.logInfo}>
@@ -105,7 +148,9 @@ const InjectionLogsScreen = () => {
         <View style={styles.buttonSection}>
           <TouchableOpacity
             style={styles.logButton}
-            onPress={() => navigation.navigate('LogInjection')}
+            onPress={() =>
+              navigation.navigate('LogInjection', { programId: program?._id })
+            }
           >
             <Text style={styles.logButtonText}>Log Injection</Text>
           </TouchableOpacity>
