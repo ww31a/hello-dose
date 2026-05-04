@@ -52,8 +52,8 @@ const LogInjectionScreen = () => {
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
   const logInjectionMutation = useMutation({
-    mutationFn: ({ dosage, site, injectedAt, notes }) =>
-      patientService.logInjection(dosage, site, injectedAt, notes),
+    mutationFn: ({ dosage, site, injectedAt, notes, programId }) =>
+      patientService.logInjection(dosage, site, injectedAt, notes, programId),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patientDashboard'] });
@@ -69,7 +69,9 @@ const LogInjectionScreen = () => {
 
   const handleLog = () => {
     const site = SITE_MAPPING[selectedSite] || 'L_ABDOMEN';
-    const dosage = dashboard?.healthInsights?.currentDosage || '5.0';
+    const programId = route.params?.programId;
+    const currentProgram = dashboard?.programs?.find(p => p._id === programId);
+    const dosage = currentProgram?.healthInsights?.currentDosage || '5.0';
 
     const injectedAt = new Date(
       date.getFullYear(),
@@ -80,7 +82,7 @@ const LogInjectionScreen = () => {
       0,
     ).toISOString();
 
-    logInjectionMutation.mutate({ dosage, site, injectedAt, notes });
+    logInjectionMutation.mutate({ dosage, site, injectedAt, notes, programId });
   };
 
   // ---------- PICKER HANDLERS ----------

@@ -102,9 +102,8 @@ const ProfileScreen = () => {
             key={prog._id || index}
             style={styles.programCard}
             onPress={() => 
-              navigation.navigate('Home', {
-                screen: 'MyProgram',
-                params: { programId: prog._id }
+              navigation.navigate('MyProgram', {
+                programId: prog._id
               })
             }
           >

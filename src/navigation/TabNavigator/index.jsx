@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStackNavigator from '../HomeStackNavigator';
 import ChatScreen from '../../screens/UserScreens/ChatScreen';
-import ProfileScreen from '../../screens/UserScreens/ProfileScreen';
+import ProfileStackNavigator from '../ProfileStackNavigator';
 import { Colors } from '../../theme';
 import styles from './styles';
 
@@ -57,7 +57,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStackNavigator}
         options={{
           tabBarLabel: 'Profile',
         }}

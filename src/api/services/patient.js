@@ -33,8 +33,8 @@ export const patientService = {
    * Submit an injection log.
    * POST /api/v1/patient/injection-log
    */
-  logInjection: async (dosage, site, injectedAt, notes) => {
-    return apiClient.post('/api/v1/patient/injection-log', { dosage, site, injectedAt, notes });
+  logInjection: async (dosage, site, injectedAt, notes, programId) => {
+    return apiClient.post('/api/v1/patient/injection-log', { dosage, site, injectedAt, notes, programId });
   },
 
   /**
@@ -61,7 +61,7 @@ export const patientService = {
    * Fetch injection log history.
    * GET /api/v1/patient/injection-history
    */
-  getInjectionHistory: async () => {
-    return apiClient.get('/api/v1/patient/injection-history');
+  getInjectionHistory: async (programId) => {
+    return apiClient.get('/api/v1/patient/injection-history', { params: { programId } });
   },
 };

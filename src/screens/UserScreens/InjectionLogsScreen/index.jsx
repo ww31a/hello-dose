@@ -25,8 +25,8 @@ const InjectionLogsScreen = () => {
   });
 
   const { data: logData } = useQuery({
-    queryKey: ['injectionHistory'],
-    queryFn: patientService.getInjectionHistory,
+    queryKey: ['injectionHistory', programId],
+    queryFn: () => patientService.getInjectionHistory(programId),
   });
 
   const program = programId
