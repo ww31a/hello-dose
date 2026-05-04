@@ -48,11 +48,11 @@ const NPTabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Chat"
         component={NPChatScreen}
         options={{ tabBarLabel: 'Chat' }}
-      />
+      /> */}
       <Tab.Screen
         name="Home"
         component={NPHomeScreen}
